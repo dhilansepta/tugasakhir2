@@ -26,13 +26,20 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        if (Auth::user()->status === 'Non_Aktif') {
+            Auth::logout();
+            return back()->withErrors([
+                'username' => __('Akun Anda tidak aktif. Silakan hubungi administrator.'),
+            ]);
+        }
+
         $request->session()->regenerate();
 
         if(Auth::user()->role == 'Owner'){
             return redirect(route('owner.dashboard'));
         }
 
-        return redirect()->intended(route('karyawan.dashboard', absolute: false));
+        return redirect()->intended(route('karyawan.barangkeluar', absolute: false));
     }
 
     /**

@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\KaryawanMiddleware;
 use App\Http\Middleware\OwnerMiddleware;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -18,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'ownerMiddleware' => OwnerMiddleware::class
         ]);
     })
+    ->withSchedule(function(Schedule $schedule){
+        $schedule->command('insert-laporan-stok')->dailyAt('00:01'); //sesuaikan kapan scheduler harus menjalankan perintah
+    })    
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

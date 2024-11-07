@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('username')->unique();
             $table->enum('role', ['Owner', 'Karyawan'])->default('Karyawan');
+            $table->enum('status', ['Aktif', 'Non_Aktif'])->default('Aktif');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
