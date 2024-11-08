@@ -5,10 +5,14 @@ namespace App\Models;
 use App\Observers\BarangObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 #[ObservedBy([BarangObserver::class])]
 class Barang extends Model
 {
+
+    use Notifiable;
+    
     protected $table = 'Barang';
 
     protected $fillable = [

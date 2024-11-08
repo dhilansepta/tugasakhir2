@@ -3,9 +3,11 @@
 namespace App\Observers;
 
 use App\Models\Barang;
-use App\Models\LaporanPenjualan;
+use App\Models\User;
 use App\Models\LaporanStokBarang;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\StokNotification;
+use Illuminate\Support\Facades\Notification;
 
 class BarangObserver
 {
@@ -45,7 +47,7 @@ class BarangObserver
 
         $hargaJual = $barang->harga_jual;
         $keuntungan_persatuan = $barang->keuntungan;
-        
+
         $keuntungan = $keuntungan_persatuan * $laporanStokBarang->stok_keluar;
         $pendapatan_kotor = $hargaJual * $laporanStokBarang->stok_keluar;
         $kerugian = abs($hargaJual * $laporanStokBarang->stok_minus);
@@ -63,6 +65,7 @@ class BarangObserver
             'pendapatan_sebenarnya' => $pendapatan_sebenarnya,
         ];
         DB::table('laporanpenjualan')->insert($dataLaporanPenjualan);
+
         $barang->save();
         $laporanStokBarang->save();
     }
@@ -72,8 +75,23 @@ class BarangObserver
      */
     public function updated(Barang $barang): void
     {
+        $users = User::where('role', 'Owner')->get();
+
         //Jika update harga jual barang, maka update laporan penjualan
-        
+        if ($barang->stok <= 5) {
+            Notification::send($users, new StokNotification($barang->id, $barang->stok));
+        } else {
+            foreach ($users as $user) {
+                $notifications = $user->notifications()
+                    ->where('type', StokNotification::class)
+                    ->where('data->id_barang', $barang->id)
+                    ->get();
+
+                foreach ($notifications as $notification) {
+                    $notification->delete();
+                }
+            }
+        }
     }
 
     /**

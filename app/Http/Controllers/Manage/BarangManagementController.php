@@ -7,10 +7,10 @@ use App\Models\Barang;
 use App\Models\Kategori;
 use App\Models\Satuan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class BarangManagementController extends Controller
 {
+
     public function store(Request $request)
     {
         $request->validate([
@@ -36,6 +36,8 @@ class BarangManagementController extends Controller
             'stok' => $request->stok ?? 0,
             'barcode' => $request->barcode,
         ]);
+        
+        
         $barang->save();
 
         return redirect()->back()->with('success', 'Data berhasil dibuat');

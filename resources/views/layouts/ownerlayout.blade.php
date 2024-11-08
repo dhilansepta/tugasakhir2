@@ -121,22 +121,21 @@
                             <span class="d-none d-lg-inline-flex">Notification</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Profile updated</h6>
-                                <small>15 minutes ago</small>
-                            </a>
+                            @if(auth()->user()->notifications->isNotEmpty())
+                                @foreach (auth()->user()->notifications as $notification)
+                                <a href="#" class="dropdown-item">
+                                    <li class="fw-normal mb-0"> {{$notification->data['data']}}</li>
+                                </a>
+                                <hr class="dropdown-divider">
+                                @endforeach
+                            @else
+                                <a href="#" class="dropdown-item">
+                                    <li class="fw-normal mb-0">Tidak Ada Notifikasi</li>
+                                </a>
+                                <hr class="dropdown-divider">
+                            @endif
                             <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">New user added</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Password changed</h6>
-                                <small>15 minutes ago</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item text-center">See all notifications</a>
+                            <a href="{{route('owner.daftarbarang')}}" class="dropdown-item text-center">Periksa Daftar Barang</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
