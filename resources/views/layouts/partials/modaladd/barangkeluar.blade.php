@@ -28,15 +28,31 @@
                         <label for="kategoriBarang" class="form-label">Kategori Barang</label>
                         <input type="string" class="form-control" id="kategoriBarang" name="kategoriBarang" readonly>
                     </div>
+
                     <div class="mb-3">
                         <label for="satuanBarang" class="form-label">Satuan Barang</label>
                         <input type="string" class="form-control" id="satuanBarang" name="satuanBarang" readonly>
                     </div>
 
                     <div class="mb-3">
+                        <label for="satuanTelur" class="form-label" id="satuanTelurLabel" style="display: none;">Satuan Telur</label>
+                        <select class="form-control" id="satuanTelur" name="satuanTelur" style="display: none;">
+                            <option value="" disabled selected>Pilih Satuan Telur</option>
+                            <option value="kg">Kilogram</option>
+                            <option value="peti">Peti</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="jumlahPeti" class="form-label" id="jumlahPetiLabel" style="display: none;">Jumlah Peti</label>
+                        <input type="number" class="form-control" id="jumlahPeti" name="jumlahPeti" style="display: none;">
+                    </div>
+
+                    <div class="mb-3">
                         <label for="jumlahKeluar" class="form-label">Jumlah Barang Keluar</label>
                         <input type="number" class="form-control" id="jumlahKeluar" name="jumlahKeluar" required>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-success">Tambah Data</button>
@@ -48,6 +64,16 @@
 </div>
 
 <script>
+    const jumlahPetiInput = document.getElementById('jumlahPeti');
+    const jumlahInput = document.getElementById('jumlahKeluar');
+
+    function hitungTotalBarangMasukTelur() {
+        const jumlahPeti = parseInt(jumlahPetiInput.value) || 0;
+        jumlahInput.value = jumlahPeti * 15;
+    }
+
+    jumlahPetiInput.addEventListener('input', hitungTotalBarangMasukTelur);
+
     $(document).ready(function() {
         $('.namaBarangSelect').select2({
             width: '100%',
@@ -83,6 +109,27 @@
                         } else {
                             $('#kategoriBarang').val(data.kategori);
                             $('#satuanBarang').val(data.satuan);
+
+                            let nama_barang = data.nama_barang;
+                            console.log(nama_barang);
+                            if (nama_barang === 'Telur') {
+                                $('#satuanTelur').show();
+                                $('#satuanTelurLabel').show();
+
+                                // Tambahkan event listener pada #satuanTelur
+                                $('#satuanTelur').on('change', function() {
+                                    if ($(this).val() === 'peti') {
+                                        $('#jumlahPeti').show();
+                                        $('#jumlahPetiLabel').show();
+                                    } else {
+                                        $('#jumlahPeti').hide().val('');
+                                        $('#jumlahPetiLabel').hide();
+                                    }
+                                });
+                            } else {
+                                $('#satuanTelur').hide().val('');
+                                $('#satuanTelurLabel').hide();
+                            }
                         }
                     },
                     error: function() {

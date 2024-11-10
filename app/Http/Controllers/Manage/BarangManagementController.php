@@ -7,6 +7,7 @@ use App\Models\Barang;
 use App\Models\Kategori;
 use App\Models\Satuan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BarangManagementController extends Controller
 {
@@ -21,7 +22,6 @@ class BarangManagementController extends Controller
             'harga_jual' => ['required', 'integer', 'min:0'],
             'keuntungan' => ['nullable', 'integer', 'min:0'],
             'stok' => ['nullable', 'integer', 'min:0'],
-            'barcode' => ['required', 'string', 'unique:barang,barcode'],
         ]);
 
         $keuntungan = $request->keuntungan ?? ($request->harga_jual - $request->harga_beli);
@@ -34,7 +34,6 @@ class BarangManagementController extends Controller
             'harga_jual' => $request->harga_jual,
             'keuntungan' => $keuntungan,
             'stok' => $request->stok ?? 0,
-            'barcode' => $request->barcode,
         ]);
         
         
@@ -68,19 +67,6 @@ class BarangManagementController extends Controller
         return view('owner.daftarbarang', compact('barang', 'kategori', 'satuan'));
     }
 
-    public function edit($id)
-    {
-        $barang = Barang::find($id);
-
-        // Jika kategori tidak ditemukan, berikan response atau redirect dengan error
-        if (!$barang) {
-            return redirect()->route('owner.barangmasuk')->with('error', 'Data Barang tidak ditemukan.');
-        }
-
-        // Jika kategori ditemukan, tampilkan view edit dan kirim data kategori
-        return view('owner.barangmasuk', compact('barang'));
-    }
-
     public function update(Request $request, $id)
     {
         $barang = Barang::findOrFail($id);
@@ -92,7 +78,6 @@ class BarangManagementController extends Controller
             'harga_beli' => ['required', 'integer', 'min:0'],
             'harga_jual' => ['required', 'integer', 'min:0'],
             'keuntungan' => ['nullable', 'integer', 'min:0'],
-            'barcode' => ['required', 'string', 'unique:barang,barcode,' . $id],
         ]);
 
         $keuntungan = $request->keuntungan ?? ($request->harga_jual - $request->harga_beli);
@@ -104,9 +89,27 @@ class BarangManagementController extends Controller
             'harga_beli' => $request->harga_beli,
             'harga_jual' => $request->harga_jual,
             'keuntungan' => $keuntungan,
-            'barcode' => $request->barcode,
         ]);
+        
+        $dataHargaBeliVersion = [
+            'updated_at' => now(),
+            'harga_persatuan' => $barang->harga_beli, 
+        ];
+        
+        // Update the latest record for the specific `barang_id`
+        DB::table('harga_beli_version')
+            ->where('barang_id', $barang->id)
+            ->update($dataHargaBeliVersion);
 
         return redirect()->route('owner.daftarbarang')->with('success', 'Data Barang berhasil diperbarui');
+    }
+
+    public function destroy($id){
+        $barang = Barang::findOrFail($id);
+
+        $barang->delete();
+
+        // Redirect dengan pesan sukses
+        return redirect()->back()->with('success', 'Data Barang berhasil dihapus dan stok telah diperbarui.');
     }
 }

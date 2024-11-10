@@ -66,6 +66,14 @@ class BarangObserver
         ];
         DB::table('laporanpenjualan')->insert($dataLaporanPenjualan);
 
+        $dataHargaBeliVersion = [
+            'created_at' => now(),
+            'updated_at' => now(),
+            'barang_id' => $barang->id,
+            'harga_persatuan' => $barang->harga_beli, 
+        ];
+        DB::table('harga_beli_version')->insert($dataHargaBeliVersion);
+
         $barang->save();
         $laporanStokBarang->save();
     }

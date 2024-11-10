@@ -26,19 +26,6 @@ class KategoriManagementController extends Controller
         return view('owner.kategoribarang', compact('kategori'));
     }
 
-    public function edit($id)
-    {
-        $kategori = Kategori::find($id);
-
-        // Jika kategori tidak ditemukan, berikan response atau redirect dengan error
-        if (!$kategori) {
-            return redirect()->route('owner.kategoribarang')->with('error', 'Kategori tidak ditemukan.');
-        }
-
-        // Jika kategori ditemukan, tampilkan view edit dan kirim data kategori
-        return view('owner.kategoribarang', compact('kategori'));
-    }
-
     public function update(Request $request, $id)
     {
         $kategori = Kategori::findOrFail($id);
@@ -52,5 +39,14 @@ class KategoriManagementController extends Controller
         ]);
 
         return redirect()->route('owner.kategoribarang')->with('success', 'Kategori berhasil diperbarui');
+    }
+
+    public function destroy($id){
+        $kategori = Kategori::findOrFail($id);
+
+        $kategori->delete();
+
+        // Redirect dengan pesan sukses
+        return redirect()->back()->with('success', 'Data Kategori berhasil dihapus.');
     }
 }

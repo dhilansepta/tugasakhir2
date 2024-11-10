@@ -5,9 +5,7 @@ namespace App\Observers;
 use App\Models\Barang;
 use App\Models\BarangMasuk;
 use App\Models\HargaBeliVersion;
-use App\Models\LaporanPenjualan;
 use App\Models\LaporanStokBarang;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class BarangMasukObserver
@@ -34,14 +32,7 @@ class BarangMasukObserver
 
         if ($barang) {
             if ($laporanStok && isset($barangMasuk->harga_persatuan)) {
-                $data = [
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                    'barang_id' => $barangMasuk->barang_id, // Menggunakan ID barang dari model
-                    'harga_persatuan' => $barang->harga_beli
-                ];
-                DB::table('harga_beli_version')->insert($data);
-
+                //Kalau di laporan stok ada barangnya, dan field harga_persatuan terisi
                 $barang->harga_beli = $barangMasuk->harga_persatuan;
                 $barang->keuntungan = $barang->harga_jual - $barang->harga_beli;
                 $barang->save();
@@ -61,9 +52,9 @@ class BarangMasukObserver
     public function updated(BarangMasuk $barangMasuk): void
     {
         $stokDiff = $barangMasuk->getOriginal('jumlah') - $barangMasuk->jumlah;
+
         // Ambil data laporan stok untuk barang lama (sebelum update)
         $oldBarangId = (int)$barangMasuk->getOriginal('barang_id');
-
         $oldLaporanStok = LaporanStokBarang::where('barang_id', $oldBarangId)
             ->orderBy('created_at', 'desc')
             ->first();
@@ -76,11 +67,16 @@ class BarangMasukObserver
             ->first();
         $newBarang = Barang::find($newBarangId);
 
-        //Ambil data harga beli lama (sebelum update)
-        $lastVersion = HargaBeliVersion::where('barang_id', $oldBarangId)
+        //Ambil data harga beli paling pertama (ketika mendaftarkan barang)
+        $firstVersion = HargaBeliVersion::where('barang_id', $oldBarangId)
+        ->first();
+
+        //Ambil data harga_beli terakhir dari data barangmasuk
+        $latestHargaBeli = BarangMasuk::where('barang_id', $oldBarangId)
             ->orderBy('created_at', 'desc')
             ->first();
 
+        //define harga_beli barang masuk agar lebih mudah dimengerti
         $newHargaPersatuan = $barangMasuk->harga_persatuan;
 
         // Jika barang_id berubah
@@ -88,7 +84,7 @@ class BarangMasukObserver
             Log::warning("id barang berubah dari {$oldBarangId} menjadi {$newBarangId}");
             //Cek apakah oldLaporanStok tersedia
             if ($oldLaporanStok) {
-                if ($lastVersion) {
+                if ($latestHargaBeli) { //Ini jika ketika melakukan update, data harga_beli diambil dari data_barang masuk paling akhir
                     // Kurangi stok masuk barang lama dan hitung ulang stok akhir
                     $oldLaporanStok->stok_masuk -= $barangMasuk->getOriginal('jumlah');
                     $oldLaporanStok->stok_akhir = ($oldLaporanStok->stok_awal + $oldLaporanStok->stok_masuk) - $oldLaporanStok->stok_keluar;
@@ -96,27 +92,29 @@ class BarangMasukObserver
                     Log::warning("stok pada data barang dan laporan stok lama berhasil dikurang");
 
                     // Ubah harga_beli ke latest version
-                    $oldBarang->harga_beli = $lastVersion->harga_persatuan;
+                    $oldBarang->harga_beli = $latestHargaBeli->harga_persatuan; //ini harusnya cek ke table_barang masuk dengan harga_beli barang paling terakhir
                     $oldBarang->keuntungan = $oldBarang->harga_jual - $oldBarang->harga_beli;
                     $oldLaporanStok->save();
                     $oldBarang->save();
-                    Log::warning("Data Harga_beli berhasil dikembalikan sesuai last version");
-                } else {
-                    Log::warning("Tidak ada versi harga beli untuk barang lama.");
+                    Log::warning("Data Harga_beli berhasil dikembalikan sesuai harga_beli paling akhir di data barang masuk");
+
+                } else { //Ini Jika Data Barang Masuk belum ada tapi ambil dari data harga_beli pertama dari data barang
+                    // Kurangi stok masuk barang lama dan hitung ulang stok akhir
+                    $oldLaporanStok->stok_masuk -= $barangMasuk->getOriginal('jumlah');
+                    $oldLaporanStok->stok_akhir = ($oldLaporanStok->stok_awal + $oldLaporanStok->stok_masuk) - $oldLaporanStok->stok_keluar;
+                    $oldBarang->stok -= $barangMasuk->getOriginal('jumlah');
+                    Log::warning("stok pada data barang dan laporan stok lama berhasil dikurang");
+
+                    // Ubah harga_beli ke latest version
+                    $oldBarang->harga_beli = $firstVersion->harga_persatuan;
+                    $oldBarang->keuntungan = $oldBarang->harga_jual - $oldBarang->harga_beli;
+                    $oldLaporanStok->save();
+                    $oldBarang->save();
+                    Log::warning("Data Harga_beli berhasil dikembalikan sesuai First Version");
                 }
             }
             //Cek apakah newLaporanStok tersedia
             if ($newLaporanStok) {
-                //Create last version untuk data barang baru
-                $data = [
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                    'barang_id' => (int)$barangMasuk->barang_id, // Menggunakan ID barang dari model
-                    'harga_persatuan' => $newBarang->harga_beli
-                ];
-                DB::table('harga_beli_version')->insert($data);
-                Log::warning("Data Last version untuk {$newBarangId} berhasil dibuat");
-
                 //Ubah Stok barang baru
                 $newLaporanStok->stok_masuk += (int)$barangMasuk->jumlah;
                 $newLaporanStok->stok_akhir = ($newLaporanStok->stok_awal + $newLaporanStok->stok_masuk) - $newLaporanStok->stok_keluar;
@@ -135,16 +133,6 @@ class BarangMasukObserver
         else if ($oldBarangId == $newBarangId) {
             Log::warning("id barang tidak berubah dari {$oldBarangId} menjadi {$newBarangId}");
             if ($newLaporanStok) {
-                //Create last version untuk data barang baru
-                $data = [
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                    'barang_id' => (int)$barangMasuk->barang_id, // Menggunakan ID barang dari model
-                    'harga_persatuan' => $newBarang->harga_beli
-                ];
-                DB::table('harga_beli_version')->insert($data);
-                Log::warning("Data Last version untuk {$newBarangId} berhasil dibuat");
-
                 // Update stok masuk dan stok akhir berdasarkan perbedaan jumlah
                 $newLaporanStok->stok_masuk -= $stokDiff;
                 $newLaporanStok->stok_akhir = ($newLaporanStok->stok_awal + $newLaporanStok->stok_masuk) - $newLaporanStok->stok_keluar;
@@ -153,7 +141,6 @@ class BarangMasukObserver
                 $newBarang->save();
                 Log::warning("berhasil update stok masuk dan stok akhir berdasarkan perbedaan jumlah");
 
-                //Update Harga Beli Barang Baru
                 //Ubah Harga Beli barang baru
                 $newBarang->harga_beli = $newHargaPersatuan;
                 $newBarang->keuntungan = $newBarang->harga_jual - $newBarang->harga_beli;
@@ -176,11 +163,16 @@ class BarangMasukObserver
         $barangId = $barangMasuk->barang_id;
         $barang = Barang::find($barangId);
 
-        $lastVersion = HargaBeliVersion::where('barang_id', $barangId)
-            ->orderBy('created_at', 'desc')
+        $firstVersion = HargaBeliVersion::where('barang_id', $barangId)
             ->first();
+
+        $latestHargaBeli = BarangMasuk::where('barang_id', $barangId)
+            ->orderBy('created_at', 'desc')
+            ->value('harga_persatuan');
+
         if ($laporanStok) {
-            if ($lastVersion) {
+            //Cek apakah hargabeli pada data barangmasuk sudah ada sebelumnya
+            if ($latestHargaBeli) {
                 // Kurangi stok masuk barang lama dan hitung ulang stok akhir
                 $laporanStok->stok_masuk -= $barangMasuk->jumlah;
                 $laporanStok->stok_akhir = ($laporanStok->stok_awal + $laporanStok->stok_masuk) - $laporanStok->stok_keluar;
@@ -188,12 +180,22 @@ class BarangMasukObserver
                 Log::warning("stok pada data barang dan laporan stok lama berhasil dikurang");
 
                 // Ubah harga_beli ke latest version
-                $barang->harga_beli = $lastVersion->harga_persatuan;
+                $barang->harga_beli = $latestHargaBeli;
                 $laporanStok->save();
                 $barang->save();
                 Log::warning("Data Harga_beli berhasil dikembalikan sesuai last version");
-            } else {
-                Log::warning("Tidak ada versi harga beli untuk barang lama.");
+            } else if ($firstVersion) { //Cek apakah data harga_beli pada barang untuk backup data sudah tersedia atau belum
+                // Kurangi stok masuk barang lama dan hitung ulang stok akhir
+                $laporanStok->stok_masuk -= $barangMasuk->jumlah;
+                $laporanStok->stok_akhir = ($laporanStok->stok_awal + $laporanStok->stok_masuk) - $laporanStok->stok_keluar;
+                $barang->stok -= $barangMasuk->jumlah;
+                Log::warning("stok pada data barang dan laporan stok lama berhasil dikurang");
+
+                // Ubah harga_beli ke latest version
+                $barang->harga_beli = $firstVersion->harga_persatuan;
+                $laporanStok->save();
+                $barang->save();
+                Log::warning("Data Harga_beli berhasil dikembalikan sesuai last version");
             }
         }
     }

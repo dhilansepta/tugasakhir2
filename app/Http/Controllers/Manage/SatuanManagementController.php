@@ -26,19 +26,6 @@ class SatuanManagementController extends Controller
         return view('owner.satuanbarang', compact('satuan'));
     }
 
-    public function edit($id)
-    {
-        $satuan = Satuan::find($id);
-
-        // Jika satuan tidak ditemukan, berikan response atau redirect dengan error
-        if (!$satuan) {
-            return redirect()->route('owner.satuanbarang')->with('error', 'Satuan tidak ditemukan.');
-        }
-
-        // Jika satuan ditemukan, tampilkan view edit dan kirim data satuan
-        return view('owner.satuanbarang', compact('satuan'));
-    }
-
     public function update(Request $request, $id)
     {
         $satuan = Satuan::findOrFail($id);
@@ -52,5 +39,16 @@ class SatuanManagementController extends Controller
         ]);
 
         return redirect()->route('owner.satuanbarang')->with('success', 'Satuan berhasil diperbarui');
+    }
+
+    public function destroy($id)
+    {
+        // Cari data barangmasuk berdasarkan ID
+        $satuan = Satuan::findOrFail($id);
+
+        $satuan->delete();
+
+        // Redirect dengan pesan sukses
+        return redirect()->back()->with('success', 'Data Satuan berhasil dihapus.');
     }
 }

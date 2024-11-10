@@ -20,7 +20,6 @@ return new class extends Migration
             $table->integer('harga_jual');
             $table->integer('keuntungan')->nullable();
             $table->integer('stok')->default(0);
-            $table->string('barcode')->unique();
             $table->timestamps();
         });
     }

@@ -59,8 +59,9 @@ Route::put('edit-returbarang/{id}', [ReturBarangManagementController::class, 'up
 
 //Manage Delete
 Route::delete('delete-barangkeluar/{id}', [BarangKeluarManagementController::class, 'destroy'])->name('manage.delete-barangkeluar');
-Route::delete('delete-barangkeluar/{id}', [BarangKeluarManagementController::class, 'destroy'])->name('manage.delete-barangkeluar');
+Route::delete('delete-barangmasuks/{id}', [BarangMasukManagementController::class, 'destroy'])->name('manage.delete-barangmasuk');
 Route::delete('delete-returbarang/{id}', [ReturBarangManagementController::class, 'destroy'])->name('manage.delete-returbarang');
+Route::delete('delete-daftarbarang/{id}', [BarangManagementController::class, 'destroy'])->name('manage.delete-daftarbarang');
 
 //Select 2 Controller
 Route::get('selectbarang', [Select2Controller::class, 'selectBarang'])->name('selectbarang');
@@ -72,6 +73,8 @@ Route::get('/downloadLaporanStok-pdf', [PDFController::class, 'downloadLaporanSt
 
 
 Route::get('/viewLaporan', [PDFController::class, 'viewLaporan'])->name('pdf.laporanPenjualan');
+
+Route::get('/data-dashboard', [DashboardController::class, 'getData']);
 
 //Karyawan Routes
 Route::middleware(['auth', 'karyawanMiddleware'])->group(function () {
@@ -106,4 +109,7 @@ Route::middleware(['auth', 'ownerMiddleware'])->group(function () {
     Route::get('owner/penjualan', [PenjualanController::class, 'viewLaporanPenjualan'])->name('owner.penjualan');
     Route::get('owner/dashboard', [DashboardController::class, 'viewData'])->name('owner.dashboard');
     Route::get('owner/returbarang', [ReturBarangManagementController::class, 'viewData'])->name('owner.returbarang');
+
+    //Get Data untuk Dashboard
+
 });

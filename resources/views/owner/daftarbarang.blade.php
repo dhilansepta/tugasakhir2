@@ -18,9 +18,7 @@
         @include('layouts.partials.modaledit.daftarbarang')
 
         <div class="d-flex flex-column bd-highlight bg-secondary rounded p-3 mt-2">
-            <div class="d-flex flex-row align-items-end justify-content-between mb-2">
-                <div>Tampilan xx Data</div>
-
+            <div class="d-flex flex-row align-items-end justify-content-end mb-2">
                 <form action="{{ route('owner.daftarbarang') }}" method="GET" class="d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center">
                         <select name="sort_by" class="form-select form-select-sm me-2" style="width: 150px; border-color:var(--tertiary)" onchange="this.form.submit()">
@@ -65,7 +63,6 @@
                             <th scope="col">Harga Jual</th>
                             <th scope="col">Keuntungan</th>
                             <th scope="col">Sisa Stok</th>
-                            <th scope="col">Barcode</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
@@ -79,7 +76,6 @@
                             <td>Rp {{ number_format($data->harga_jual, 0, ',', '.') }}</td>
                             <td>Rp {{ number_format($data->keuntungan, 0, ',', '.') }}</td>
                             <td>{{ $data->stok }} {{ $data->satuan->satuan }}</td>
-                            <td>{{ $data->barcode }}</td>
                             <td>
                                 <a class="btn btn-sm btn-warning mx-2 btn-edit"
                                     href="#"
@@ -92,8 +88,7 @@
                                     data-harga_beli="{{ $data->harga_beli }}"
                                     data-harga_jual="{{ $data->harga_jual }}"
                                     data-keuntungan="{{ $data->keuntungan }}"
-                                    data-stok="{{ $data->stok }}"
-                                    data-barcode="{{ $data->barcode }}">
+                                    data-stok="{{ $data->stok }}">
                                     Edit
                                 </a>
                                 <a class="btn btn-sm btn-danger mx-2 btn-delete">
@@ -128,7 +123,6 @@
                 var dataHargaBeli = this.getAttribute('data-harga_beli');
                 var dataHargaJual = this.getAttribute('data-harga_jual');
                 var dataKeuntungan = this.getAttribute('data-keuntungan');
-                var dataBarcode = this.getAttribute('data-barcode');
 
                 // Isi form dengan data
                 document.getElementById('edit_nama_barang').value = dataNama;
@@ -137,7 +131,6 @@
                 document.getElementById('edit_harga_beli').value = dataHargaBeli;
                 document.getElementById('edit_harga_jual').value = dataHargaJual;
                 document.getElementById('edit_keuntungan').value = dataKeuntungan;
-                document.getElementById('edit_barcode').value = dataBarcode;
 
                 hitungKeuntungan();
 

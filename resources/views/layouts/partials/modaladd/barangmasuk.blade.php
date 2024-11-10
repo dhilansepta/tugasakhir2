@@ -14,7 +14,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="namaBarang" class="form-label">Nama Barang</label>
-                        <select class="namaBarangSelect" id="namaBarang" name="barang_id" required>
+                        <select class="namaBarangSelect" id="namaBarang" name="barang_id" autocomplete="off" required>
                             <option value="" disabled selected>Pilih Barang</option>
                             @foreach ($barang as $item)
                             <option value="{{$item->id}}">{{$item->nama_barang}}</option>
@@ -30,15 +30,27 @@
                         <input type="string" class="form-control" id="satuanBarang" name="satuanBarang" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="hargaBeli" class="form-label">Harga Beli Barang</label>
-                        <input type="number" class="form-control" id="hargaBeli" name="harga_beli" required>
+                        <label for="satuanTelur" class="form-label" id="satuanTelurLabel" style="display: none;">Satuan Telur</label>
+                        <select class="form-control" id="satuanTelur" name="satuanTelur" style="display: none;">
+                            <option value="" disabled selected>Pilih Satuan Telur</option>
+                            <option value="kg">Kilogram</option>
+                            <option value="peti">Peti</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="jumlahPeti" class="form-label" id="jumlahPetiLabel" style="display: none;">Jumlah Peti</label>
+                        <input type="number" class="form-control" id="jumlahPeti" name="jumlahPeti" style="display: none;">
                     </div>
                     <div class="mb-3">
                         <label for="jumlah" class="form-label">Jumlah Barang Masuk</label>
                         <input type="number" class="form-control" id="jumlah" name="jumlah" required>
                     </div>
                     <div class="mb-3">
-                        <label for="harga_persatuan" class="form-label">Harga Beli Persatuan</label>
+                        <label for="hargaBeli" class="form-label">Harga Beli Barang</label>
+                        <input type="number" class="form-control" id="hargaBeli" name="harga_beli" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="harga_persatuan" class="form-label">Harga Beli Persatuan Barang</label>
                         <input type="number" class="form-control" id="hargaBeliSatuan" name="harga_persatuan" readonly>
                     </div>
                     <div class="modal-footer">
@@ -52,19 +64,29 @@
 </div>
 
 <script>
+    const jumlahPetiInput = document.getElementById('jumlahPeti');
+
     const hargaBeliInput = document.getElementById('hargaBeli');
     const jumlahInput = document.getElementById('jumlah');
     const hargaBeliSatuanInput = document.getElementById('hargaBeliSatuan');
 
+    function hitungTotalBarangMasukTelur() {
+        const jumlahPeti = parseInt(jumlahPetiInput.value) || 0;
+        jumlahInput.value = jumlahPeti * 15;
+    }
+
     function hitungHargaBeliSatuan() {
         const hargaBeli = parseInt(hargaBeliInput.value) || 0;
         const jumlah = parseInt(jumlahInput.value) || 0;
-        const hargaBeliSatuan = hargaBeli / jumlah;
+        const hargaBeliSatuan = parseInt(hargaBeli / jumlah);
         hargaBeliSatuanInput.value = hargaBeliSatuan;
+        console.log(hargaBeliSatuanInput.value);
     }
 
     hargaBeliInput.addEventListener('input', hitungHargaBeliSatuan);
     jumlahInput.addEventListener('input', hitungHargaBeliSatuan);
+    jumlahPetiInput.addEventListener('input', hitungTotalBarangMasukTelur);
+    jumlahPetiInput.addEventListener('input', hitungHargaBeliSatuan);
 
     $(document).ready(function() {
         $('.namaBarangSelect').select2({
@@ -101,6 +123,27 @@
                         } else {
                             $('#kategoriBarang').val(data.kategori);
                             $('#satuanBarang').val(data.satuan);
+
+                            let nama_barang = data.nama_barang;
+                            console.log(nama_barang);
+                            if (nama_barang === 'Telur') {
+                                $('#satuanTelur').show();
+                                $('#satuanTelurLabel').show();
+
+                                // Tambahkan event listener pada #satuanTelur
+                                $('#satuanTelur').on('change', function() {
+                                    if ($(this).val() === 'peti') {
+                                        $('#jumlahPeti').show();
+                                        $('#jumlahPetiLabel').show();
+                                    } else {
+                                        $('#jumlahPeti').hide().val('');
+                                        $('#jumlahPetiLabel').hide();
+                                    }
+                                });
+                            } else {
+                                $('#satuanTelur').hide().val('');
+                                $('#satuanTelurLabel').hide();
+                            }
                         }
                     },
                     error: function() {
@@ -110,6 +153,7 @@
             } else {
                 $('#kategoriBarang').val('');
                 $('#satuanBarang').val('');
+                $('#satuanBarangMasuk').hide().val('');
             }
         });
     });

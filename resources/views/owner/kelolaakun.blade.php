@@ -18,8 +18,6 @@
         @include('layouts.partials.modaledit.akun')
 
         <div class="d-flex flex-column bd-highlight bg-secondary rounded p-3 mt-3">
-            <p>Tampilkan xx data</p>
-
             <div class="table-responsive">
                 <table class="table">
                     <thead>
@@ -51,9 +49,6 @@
                                    data-role="{{ $user->role }}"
                                    data-status="{{ $user->status }}">
                                     Edit
-                                </a>
-                                <a class="btn btn-sm btn-warning mx-2 btn-danger">
-                                    Delete
                                 </a>
                             </td>
                         </tr>

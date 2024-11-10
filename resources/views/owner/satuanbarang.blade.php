@@ -19,7 +19,6 @@
 
         <div class="d-flex flex-column bd-highlight bg-secondary rounded p-3 mt-3">
             <div class="d-flex flex-row align-items-end justify-content-between mb-2">
-                <div>Tampilan xx Data</div>
                 <div>
                     Cari
                 </div>

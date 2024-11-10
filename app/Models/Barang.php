@@ -23,7 +23,6 @@ class Barang extends Model
         'harga_jual',
         'keuntungan',
         'stok',
-        'barcode',
     ];
 
     public function satuan()

@@ -46,10 +46,6 @@
                         <label for="stok" class="form-label">Sisa Stok</label>
                         <input type="number" class="form-control" id="stok" name="stok" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="barcode" class="form-label">Barcode ID</label>
-                        <input type="string" class="form-control" id="barcode" name="barcode" required>
-                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-success">Simpan</button>

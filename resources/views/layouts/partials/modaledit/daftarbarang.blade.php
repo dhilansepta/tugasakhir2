@@ -50,11 +50,6 @@
                         <input type="number" class="form-control" id="edit_keuntungan" name="keuntungan" readonly>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="edit_barcode" class="form-label">Barcode ID</label>
-                        <input type="string" class="form-control" id="edit_barcode" name="barcode" required>
-                    </div>
-
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-success">Simpan</button>

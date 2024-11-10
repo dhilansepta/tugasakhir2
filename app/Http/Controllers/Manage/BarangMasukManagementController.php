@@ -70,23 +70,6 @@ class BarangMasukManagementController extends Controller
         return view('owner.barangmasuk', compact('barang', 'barangmasuk'));
     }
 
-    public function edit($id)
-    {
-        // Find the barangmasuk record by its ID
-        $barangMasuk = BarangMasuk::findOrFail($id);
-
-        // Get all barang data
-        $barang = Barang::all();
-
-        // Set the selected barang ID
-        $selectedBarangId = $barangMasuk->barang_id; // Assuming barang_id is the foreign key in barangmasuk
-
-        // dd($selectedBarangId,$barang);
-
-        // Pass data to the view
-        return view('layouts.partials.modaledit.barangmasuk', compact('barangMasuk', 'barang', 'selectedBarangId'));
-    }
-
     public function update(Request $request, $id)
     {
         $barangMasuk = BarangMasuk::findOrFail($id);

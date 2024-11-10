@@ -14,10 +14,24 @@ class BarangKeluarManagementController extends Controller
 {
     public function store(Request $request)
     {
+        $barang = Barang::find($request->barang_id);
+
+        $stok = $barang->stok;
+        
         $request->validate([
             'barang_id' => ['required', 'exists:barang,id'],
             'karyawan_id' => ['required', 'exists:users,id'],
-            'jumlahKeluar' => ['required', 'integer', 'max:255'],
+            'jumlahKeluar' =>
+            [
+                'required',
+                'integer',
+                'max:255',
+                function ($attribute, $value, $fail) use ($stok) {
+                    if ($value > $stok) {
+                        $fail("Jumlah keluar tidak boleh melebihi stok saat ini ($stok).");
+                    }
+                },
+            ],
         ]);
 
         BarangKeluar::create([
@@ -66,9 +80,10 @@ class BarangKeluarManagementController extends Controller
         }
 
         if (Auth::user()->role == 'Owner') {
-            $barangkeluar = $barangKeluarQuery->orderBy('id', 'asc')->get();perPage: 
+            $barangkeluar = $barangKeluarQuery->orderBy('id', 'asc')->get();
+            perPage:
             return view('owner.barangkeluar', compact('barang', 'karyawan', 'barangkeluar'));
-        } elseif(Auth::user()->role == 'Karyawan'){
+        } elseif (Auth::user()->role == 'Karyawan') {
             $barangKeluarQuery->where('karyawan_id', Auth::user()->id);
             $barangkeluar = $barangKeluarQuery->orderBy('id', 'asc')->get();
             return view('karyawan.barangkeluar', compact('barang', 'barangkeluar'));
@@ -91,14 +106,13 @@ class BarangKeluarManagementController extends Controller
             'jumlahKeluar' => $request->jumlahKeluar,
         ]);
 
-        if(Auth::user()->role == 'Owner'){
+        if (Auth::user()->role == 'Owner') {
             return redirect()->route('owner.barangkeluar')->with('success', 'Data Barang berhasil diperbarui');
-        }elseif(Auth::user()->role == 'Karyawan'){
+        } elseif (Auth::user()->role == 'Karyawan') {
             return redirect()->route('karyawan.barangkeluar')->with('success', 'Data Barang berhasil diperbarui');
         }
-        
     }
-    
+
     public function destroy($id)
     {
         // Cari data barangmasuk berdasarkan ID

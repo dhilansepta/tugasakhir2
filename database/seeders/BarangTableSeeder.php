@@ -21,7 +21,6 @@ class BarangTableSeeder extends Seeder
             'harga_jual' => '19000',
             'keuntungan' => '2000',
             'stok' => '30',
-            'barcode' => '6988188700292',
         ]);
 
         Barang::create([
@@ -32,7 +31,16 @@ class BarangTableSeeder extends Seeder
             'harga_jual' => '48000',
             'keuntungan' => '8000',
             'stok' => '40',
-            'barcode' => '8997207556978',
+        ]);
+
+        Barang::create([
+            'nama_barang' => 'Telur',
+            'kategori_id' => '3',
+            'satuan_id' => '1',
+            'harga_beli' => '19000',
+            'harga_jual' => '28000',
+            'keuntungan' => '9000',
+            'stok' => '30',
         ]);
     }
 }
