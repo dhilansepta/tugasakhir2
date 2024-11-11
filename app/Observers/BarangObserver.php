@@ -18,7 +18,6 @@ class BarangObserver
     {
         //Create laporan stok barang untuk barang baru
         $barangId = $barang->id;
-        $barang = Barang::find($barangId);
 
         $stokMasuk = 0;
         $stokKeluar = 0;
@@ -70,9 +69,27 @@ class BarangObserver
             'created_at' => now(),
             'updated_at' => now(),
             'barang_id' => $barang->id,
-            'harga_persatuan' => $barang->harga_beli, 
+            'harga_persatuan' => $barang->harga_beli,
         ];
         DB::table('harga_beli_version')->insert($dataHargaBeliVersion);
+
+        $users = User::where('role', 'Owner')->get();
+
+        //Jika update harga jual barang, maka update laporan penjualan
+        if ($barang->stok <= 5) {
+            Notification::send($users, new StokNotification($barang->id, $barang->stok));
+        } else {
+            foreach ($users as $user) {
+                $notifications = $user->notifications()
+                    ->where('type', StokNotification::class)
+                    ->where('data->id_barang', $barang->id)
+                    ->get();
+
+                foreach ($notifications as $notification) {
+                    $notification->delete();
+                }
+            }
+        }
 
         $barang->save();
         $laporanStokBarang->save();

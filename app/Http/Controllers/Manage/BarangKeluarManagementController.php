@@ -14,32 +14,25 @@ class BarangKeluarManagementController extends Controller
 {
     public function store(Request $request)
     {
-        $barang = Barang::find($request->barang_id);
-
-        $stok = $barang->stok;
-        
         $request->validate([
             'barang_id' => ['required', 'exists:barang,id'],
             'karyawan_id' => ['required', 'exists:users,id'],
-            'jumlahKeluar' =>
-            [
-                'required',
-                'integer',
-                'max:255',
-                function ($attribute, $value, $fail) use ($stok) {
-                    if ($value > $stok) {
-                        $fail("Jumlah keluar tidak boleh melebihi stok saat ini ($stok).");
-                    }
-                },
-            ],
+            'jumlahKeluar' => ['required', 'integer', 'max:255'],
         ]);
+        
+        $barang = Barang::find($request->barang_id);
+
+        $stok = $barang->stok;
+
+        if ($request->jumlahKeluar > $stok) {
+            return redirect()->back()->with('error', 'Jumlah keluar tidak boleh melebihi stok saat ini.');
+        }
 
         BarangKeluar::create([
             'barang_id' => $request->barang_id,
             'karyawan_id' => $request->karyawan_id,
             'jumlahKeluar' => $request->jumlahKeluar,
         ]);
-
         return redirect()->back()->with('success', 'Data berhasil dibuat');
     }
 

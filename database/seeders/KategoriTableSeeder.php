@@ -24,5 +24,9 @@ class KategoriTableSeeder extends Seeder
         Kategori::create([
             'kategori' => 'Bahan Pokok'
         ]);
+
+        Kategori::create([
+            'kategori' => 'Telur'
+        ]);
     }
 }

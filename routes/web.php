@@ -76,6 +76,8 @@ Route::get('/viewLaporan', [PDFController::class, 'viewLaporan'])->name('pdf.lap
 
 Route::get('/data-dashboard', [DashboardController::class, 'getData']);
 
+Route::post('/import-barang', [BarangManagementController::class, 'ImportDaftarBarang'])->name('import-barang');
+
 //Karyawan Routes
 Route::middleware(['auth', 'karyawanMiddleware'])->group(function () {
     //Halaman

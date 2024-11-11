@@ -8,6 +8,8 @@ use App\Models\Kategori;
 use App\Models\Satuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\DaftarBarangImport;
 
 class BarangManagementController extends Controller
 {
@@ -26,20 +28,23 @@ class BarangManagementController extends Controller
 
         $keuntungan = $request->keuntungan ?? ($request->harga_jual - $request->harga_beli);
 
-        $barang = Barang::create([
-            'nama_barang' => $request->nama_barang,
-            'kategori_id' => $request->kategori_id,
-            'satuan_id' => $request->satuan_id,
-            'harga_beli' => $request->harga_beli,
-            'harga_jual' => $request->harga_jual,
-            'keuntungan' => $keuntungan,
-            'stok' => $request->stok ?? 0,
-        ]);
-        
-        
-        $barang->save();
+        if ($keuntungan <= 0) {
+            return redirect()->back()->with('error', 'Gagal Input Data karena, Keuntungan Barang = 0 atau kurang dari 0');
+        } else {
+            $barang = Barang::create([
+                'nama_barang' => $request->nama_barang,
+                'kategori_id' => $request->kategori_id,
+                'satuan_id' => $request->satuan_id,
+                'harga_beli' => $request->harga_beli,
+                'harga_jual' => $request->harga_jual,
+                'keuntungan' => $keuntungan,
+                'stok' => $request->stok ?? 0,
+            ]);
 
-        return redirect()->back()->with('success', 'Data berhasil dibuat');
+            $barang->save();
+
+            return redirect()->back()->with('success', 'Data berhasil dibuat');
+        }
     }
 
     public function viewBarang(Request $request)
@@ -90,12 +95,12 @@ class BarangManagementController extends Controller
             'harga_jual' => $request->harga_jual,
             'keuntungan' => $keuntungan,
         ]);
-        
+
         $dataHargaBeliVersion = [
             'updated_at' => now(),
-            'harga_persatuan' => $barang->harga_beli, 
+            'harga_persatuan' => $barang->harga_beli,
         ];
-        
+
         // Update the latest record for the specific `barang_id`
         DB::table('harga_beli_version')
             ->where('barang_id', $barang->id)
@@ -104,12 +109,36 @@ class BarangManagementController extends Controller
         return redirect()->route('owner.daftarbarang')->with('success', 'Data Barang berhasil diperbarui');
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $barang = Barang::findOrFail($id);
 
         $barang->delete();
 
         // Redirect dengan pesan sukses
         return redirect()->back()->with('success', 'Data Barang berhasil dihapus dan stok telah diperbarui.');
+    }
+
+    public function ImportDaftarBarang(Request $request)
+    {
+        $request->validate([
+            "file" => "required|mimes:xlsx"
+        ]);
+
+        // store file to storage
+        $file = $request->file("file")->store("import");
+
+        DB::beginTransaction();
+
+        try {
+            // import data
+            Excel::import(new DaftarBarangImport(), $file);
+            DB::commit();
+            return redirect()->back()->with(["success" => "Success Import Data"]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            session()->flash('error', 'Import Failed: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 }

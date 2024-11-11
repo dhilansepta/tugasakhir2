@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
             UserTableSeeder::class,
             SatuanTableSeeder::class,
             KategoriTableSeeder::class,
-            BarangTableSeeder::class,
             BarangKeluarTableSeeder::class,
             BarangMasukTableSeeder::class,
         ]);

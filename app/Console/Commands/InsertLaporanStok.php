@@ -36,7 +36,7 @@ class InsertLaporanStok extends Command
                 ->latest('id')
                 ->first();
 
-            // Hitung stok akhir, dan bisa menambahkan logika sesuai kebutuhan
+            // Hitung stok akhir
             // $stokAwal = $laporanstok && $laporanstok->stok_gudang == '0'  ? $barang->stok : $laporanstok->stok_gudang;
             $stokAwal = $laporanstok && isset($laporanstok->stok_gudang) && $laporanstok->stok_gudang == '0'
                 ? $barang->stok
@@ -52,15 +52,15 @@ class InsertLaporanStok extends Command
 
             // Data yang akan diinsert
             $data_laporanStok = [
-                'created_at' => now(), // Atau ambil tanggal sesuai kebutuhan
+                'created_at' => now(),
                 'updated_at' => now(),
                 'barang_id' => $barang->id, // Menggunakan ID barang dari model
                 'stok_awal' => $stokAwal,
                 'stok_masuk' => $stokMasuk,
                 'stok_keluar' => $stokKeluar,
                 'stok_akhir' => $stokAkhir,
-                'stok_gudang' => $stokGudang, // Jika ada logika lain untuk stok gudang
-                'stok_minus' => $stokMinus, // Hitung sesuai logika yang diinginkan
+                'stok_gudang' => $stokGudang, 
+                'stok_minus' => $stokMinus,
             ];
 
             // Insert data ke dalam tabel laporanstokbarang

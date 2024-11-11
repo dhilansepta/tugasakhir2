@@ -6,16 +6,27 @@
 
 @section('content')
 <div class="container-fluid pt-4 px-4">
+    @if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
     <div class="g-4">
-        <div class="d-flex flex-row align-items-end justify-content-between">
+        <div class="d-flex flex-row align-items-center justify-content-between">
             <h3 id="judul">Data Barang</h3>
-            <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#tambahBarangModal">
-                Tambah Barang
-            </button>
+            <div class="d-flex flex-column align-items-end justify-content-start">
+                <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#tambahBarangModal">
+                    Tambah Barang
+                </button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importExcelModal">
+                    Import Excel
+                </button>
+            </div>
         </div>
 
         @include('layouts.partials.modaladd.daftarbarang')
         @include('layouts.partials.modaledit.daftarbarang')
+        @include('layouts.partials.modaladd.importbarang')
 
         <div class="d-flex flex-column bd-highlight bg-secondary rounded p-3 mt-2">
             <div class="d-flex flex-row align-items-end justify-content-end mb-2">

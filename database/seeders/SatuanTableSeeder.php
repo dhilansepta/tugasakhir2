@@ -20,5 +20,13 @@ class SatuanTableSeeder extends Seeder
         Satuan::create([
             'satuan' => 'Dus'
         ]);
+
+        Satuan::create([
+            'satuan' => 'Bal'
+        ]);
+
+        Satuan::create([
+            'satuan' => 'Butir'
+        ]);
     }
 }

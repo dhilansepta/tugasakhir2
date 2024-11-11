@@ -6,6 +6,11 @@
 
 @section('content')
 <div class="container-fluid pt-4 px-4">
+    @if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
     <div class="g-4">
         <div class="d-flex flex-row align-items-center justify-content-between">
             <div>
