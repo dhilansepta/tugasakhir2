@@ -20,7 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withSchedule(function(Schedule $schedule){
-        $schedule->command('insert-laporan-stok')->everySecond(); //sesuaikan kapan scheduler harus menjalankan perintah
+        $schedule->command('insert-laporan-stok'); //sesuaikan kapan scheduler harus menjalankan perintah
     })    
     ->withExceptions(function (Exceptions $exceptions) {
         //
