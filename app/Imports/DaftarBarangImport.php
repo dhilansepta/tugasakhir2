@@ -5,10 +5,7 @@ namespace App\Imports;
 use App\Models\Kategori;
 use App\Models\Satuan;
 use App\Models\Barang;
-use App\Models\User;
-use App\Notifications\StokNotification;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Notification;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -26,6 +23,12 @@ class DaftarBarangImport implements ToCollection, WithHeadingRow
 
             // Hitung keuntungan
             $keuntungan = $row['harga_jual'] - $row['harga_beli'];
+
+            $barang = Barang::where('nama_barang', $row['nama_barang'])->first();
+
+            if($barang){
+                throw new \Exception("Gagal Input Data Barang, Karena " . json_encode($row["nama_barang"] . " Sudah Terdapat Dalam Database"));
+            }
 
             // Cek jika ada kolom yang null pada baris ini
             if (
@@ -51,9 +54,9 @@ class DaftarBarangImport implements ToCollection, WithHeadingRow
                 throw new \Exception("Kategori atau Satuan tidak ditemukan untuk data: " . json_encode($row));
             }
 
-
             // Data untuk update atau create
             $data = [
+                'nama_barang' => $row['nama_barang'],
                 'kategori_id' => $kategori->id,
                 'satuan_id' => $satuan->id,
                 'harga_beli' => $row['harga_beli'],
@@ -64,7 +67,6 @@ class DaftarBarangImport implements ToCollection, WithHeadingRow
 
             // Update or create barang
             Barang::updateOrCreate(
-                ['nama_barang' => $row['nama_barang']],
                 $data
             );
         }

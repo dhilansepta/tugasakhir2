@@ -5,6 +5,7 @@
 @section('inventori-link', 'active')
 
 @section('content')
+<?php $downloadUrl = route('export-barang'); ?>
 <div class="container-fluid pt-4 px-4">
     @if (session('error'))
     <div class="alert alert-danger">
@@ -18,7 +19,10 @@
                 <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#tambahBarangModal">
                     Tambah Barang
                 </button>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importExcelModal">
+                <button class="btn btn-light mb-2" onclick="window.location.href='<?= $downloadUrl ?>';">
+                    Unduh Template Excel
+                </button>
+                <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#importExcelModal">
                     Import Excel
                 </button>
             </div>
@@ -114,6 +118,7 @@
                         @endforelse
                     </tbody>
                 </table>
+                {{$barang->links()}}
             </div>
         </div>
     </div>

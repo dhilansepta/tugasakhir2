@@ -26,7 +26,7 @@
                 <div class="mt-2">
                     <button
                         type="button"
-                        class="btn btn-primary ms-auto"
+                        class="btn btn-light ms-auto"
                         style="width: 80px;">
                         Unduh
                     </button>
@@ -82,7 +82,7 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">ID</th>
+                            <th scope="col">No</th>
                             <th scope="col">Tanggal Keluar</th>
                             <th scope="col">Karyawan</th>
                             <th scope="col">Nama Barang</th>
@@ -92,9 +92,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($barangkeluar as $data)
+                        @forelse ($barangkeluar as $key => $data)
                         <tr>
-                            <td>{{ $data->id }}</td>
+                            <td>{{ $key+1 }}</td>
                             <td>{{ $data->created_at->format('d M Y') }}</td>
                             <td>{{ $data->users ? $data->users->name : 'User not found' }}</td>
                             <td>{{ $data->barang->nama_barang }}</td>

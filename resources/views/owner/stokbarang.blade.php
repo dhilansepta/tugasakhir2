@@ -17,7 +17,7 @@
         <div class="d-flex flex-row align-items-center justify-content-between mt-2">
             <button
                 type="button"
-                class="btn btn-primary rounded-pill ms-auto"
+                class="btn btn-light ms-auto"
                 style="width: 80px;"
                 onclick="window.location.href='<?= $downloadUrl ?>';">
                 Unduh
@@ -45,6 +45,14 @@
                             placeholder="Cari Nama Barang"
                             value="{{ request('filterSearch') }}"
                             style="width: 150px; border-color:var(--tertiary)">
+
+                        <select name="sort_by" class="form-select form-select-sm me-2" style="width: 150px; border-color:var(--tertiary)" onchange="this.form.submit()">
+                            <option value="" disabled selected>Sort By</option>
+                            <option value="id" {{ request('sort_by') === 'id' ? 'selected' : '' }}>ID</option>
+                            <option value="stok_minus" {{ request('sort_by') === 'stok_minus' ? 'selected' : '' }}>Stok Minus</option>
+                            <option value="stok_keluar" {{ request('sort_by') === 'stok_keluar' ? 'selected' : '' }}>Stok Keluar</option>
+                            <option value="stok_masuk" {{ request('sort_by') === 'stok_masuk' ? 'selected' : '' }}>Stok Masuk</option>
+                        </select>
 
                         <input
                             class="form-control form-control-sm me-2"
@@ -117,6 +125,7 @@
                         @endforelse
                     </tbody>
                 </table>
+                {{$laporanStok->links()}}
             </div>
         </div>
     </div>

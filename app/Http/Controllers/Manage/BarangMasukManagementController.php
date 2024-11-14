@@ -66,8 +66,8 @@ class BarangMasukManagementController extends Controller
             });
         }
 
-        $barangmasuk = $barangMasukQuery->orderBy('id', 'asc')->get();
-        return view('owner.barangmasuk', compact('barang', 'barangmasuk'));
+        $barangmasuk = $barangMasukQuery->orderBy('id', 'asc')->paginate(perPage: 10)->appends($request->all());
+        return view('owner.barangmasuk', compact('barangmasuk', 'barang'));
     }
 
     public function update(Request $request, $id)

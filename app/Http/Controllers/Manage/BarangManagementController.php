@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manage;
 
+use App\Exports\DaftarBarangExport;
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Models\Kategori;
@@ -25,6 +26,12 @@ class BarangManagementController extends Controller
             'keuntungan' => ['nullable', 'integer', 'min:0'],
             'stok' => ['nullable', 'integer', 'min:0'],
         ]);
+
+        $barang = Barang::where('nama_barang', $request->nama_barang);
+
+        if($barang){
+            return redirect()->back()->with('error', 'Gagal Input Data, Karena data barang '. $request->nama_barang .' Sudah Terdapat Dalam Database');
+        }
 
         $keuntungan = $request->keuntungan ?? ($request->harga_jual - $request->harga_beli);
 
@@ -62,13 +69,13 @@ class BarangManagementController extends Controller
         }
 
         if ($sortBy) {
-            $barang = $barangQuery->orderBy($sortBy, 'asc')->get();
+            $barangQuery->orderBy($sortBy, 'asc');
         }
 
         $kategori = Kategori::all();
         $satuan = Satuan::all();
 
-        $barang = $barangQuery->orderBy('id', 'asc')->get();
+        $barang = $barangQuery->orderBy('id', 'asc')->paginate(perPage: 10)->appends($request->all());
         return view('owner.daftarbarang', compact('barang', 'kategori', 'satuan'));
     }
 
@@ -125,7 +132,6 @@ class BarangManagementController extends Controller
             "file" => "required|mimes:xlsx"
         ]);
 
-        // store file to storage
         $file = $request->file("file")->store("import");
 
         DB::beginTransaction();
@@ -134,11 +140,16 @@ class BarangManagementController extends Controller
             // import data
             Excel::import(new DaftarBarangImport(), $file);
             DB::commit();
-            return redirect()->back()->with(["success" => "Success Import Data"]);
+            return redirect()->back();
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', 'Import Failed: ' . $e->getMessage());
             return redirect()->back();
         }
+    }
+
+    public function ExportDaftarBarang(Request $request) 
+    {
+        return Excel::download(new DaftarBarangExport, 'daftarBarang.xlsx');
     }
 }

@@ -14,6 +14,7 @@ class PenjualanController extends Controller
     {
         $filterTanggal = $request->input('filterTanggal');
         $filterSearch = $request->input('filterSearch');
+        $sortBy = $request->input('sort_by');
 
         $today = Carbon::today();
         $laporanPenjualanQuery = LaporanPenjualan::query();
@@ -28,19 +29,28 @@ class PenjualanController extends Controller
 
         if ($filterSearch) {
             $laporanPenjualanQuery->where(function ($query) use ($filterSearch) {
-                $query->whereHas('laporanstok',function ($q) use ($filterSearch) {
-                        $q->whereHas('barang', function($qu) use ($filterSearch){
+                $query->whereHas(
+                    'laporanstok',
+                    function ($q) use ($filterSearch) {
+                        $q->whereHas('barang', function ($qu) use ($filterSearch) {
                             $qu->where('nama_barang', 'like', '%' . $filterSearch . '%')
-                            ->orWhere('id', 'like', '%' . $filterSearch . '%');
+                                ->orWhere('id', 'like', '%' . $filterSearch . '%');
                         });
                     }
                 );
             });
         }
 
-        $laporanPenjualan = $laporanPenjualanQuery->orderBy('id', 'asc')->get();
+        if ($sortBy) {
+            if ($sortBy != 'id') {
+                $laporanPenjualanQuery->orderBy($sortBy, 'desc')->get();
+            }
+        }
 
-        session(['laporanPenjualan' => $laporanPenjualan]);
-        return view('owner.penjualan', compact( 'laporanPenjualan'));
+        $laporanPenjualanDowload =  $laporanPenjualanQuery->orderBy('id', 'asc')->get();
+        $laporanPenjualan = $laporanPenjualanQuery->orderBy('id', 'asc')->paginate(perPage: 5)->appends($request->all());
+
+        session(['laporanPenjualan' => $laporanPenjualanDowload]);
+        return view('owner.penjualan', compact('laporanPenjualan'));
     }
 }

@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Manage;
 
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
-use App\Models\LaporanPenjualan;
 use App\Models\LaporanStokBarang;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +13,10 @@ class DashboardController extends Controller
 {
     public function viewData(Request $request)
     {
+        $telurs = DB::table('barang')
+            ->where('nama_barang', 'LIKE', '%telur%')
+            ->get();
+
         $today = Carbon::today();
 
         $totalKaryawan = DB::table('users')
@@ -33,12 +35,13 @@ class DashboardController extends Controller
             ->whereDate('created_at', $today)
             ->sum('keuntungan');
 
-        return view('owner.dashboard', compact('totalKaryawan', 'pendapatanKotor', 'pendapatanSebenarnya', 'pendapatanBersih'));
+        return view('owner.dashboard', compact('totalKaryawan', 'pendapatanKotor', 'pendapatanSebenarnya', 'pendapatanBersih', 'telurs'));
     }
 
     public function getData(Request $request)
     {
-        $barangTelur = Barang::where('nama_barang', 'Telur')->first();
+        
+        $barangTelur = Barang::where('nama_barang', 'Telur Ayam')->first();
         $barangIdTelur = $barangTelur->id;
         $unit = $request->input('unit');
 
@@ -50,12 +53,7 @@ class DashboardController extends Controller
 
         $labelsStok = $datastokTelur->pluck('tanggal');
         $stokKeluar = $datastokTelur->pluck('stok_keluar');
-        $sisaStok = $datastokTelur->pluck('stok_akhir')->map(function($stok) use($unit){
-            if($unit == 'peti'){
-                return $stok / 15;
-            }
-            return $stok;
-        });
+        $sisaStok = $datastokTelur->pluck('stok_akhir');
 
         $dataPenjualan = DB::table('laporanpenjualan')
             ->select(
@@ -82,7 +80,7 @@ class DashboardController extends Controller
             'pendapatanKotor' => $pendapatanKotor,
             'pendapatanSebenarnya' => $pendapatanSebenarnya,
             'pendapatanBersih' => $pendapatanBersih
-            
+
         ]);
     }
 }

@@ -14,13 +14,15 @@ class StokNotification extends Notification
 
     public $stok;
     public $idBarang;
+    public $satuan;
     /**
      * Create a new notification instance.
      */
-    public function __construct($idBarang, $stok)
+    public function __construct($idBarang, $stok, $satuan)
     {
         $this->idBarang = $idBarang;
         $this->stok = $stok;
+        $this->satuan = $satuan;
     }
 
     /**
@@ -53,7 +55,7 @@ class StokNotification extends Notification
     {
         $barang = Barang::find($this->idBarang);
         return [
-            'data' => $barang->nama_barang . ' Tersisa ' . $this->stok,
+            'data' => $barang->nama_barang . ' Tersisa ' . $this->stok .' ' . $this->satuan,
             'id_barang' => $this->idBarang,
         ];
     }

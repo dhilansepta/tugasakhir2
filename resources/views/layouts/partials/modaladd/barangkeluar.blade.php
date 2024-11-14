@@ -110,9 +110,9 @@
                             $('#kategoriBarang').val(data.kategori);
                             $('#satuanBarang').val(data.satuan);
 
-                            let nama_barang = data.nama_barang;
-                            console.log(nama_barang);
-                            if (nama_barang === 'Telur') {
+                            let kategori = data.kategori;
+                            console.log(kategori);
+                            if (kategori === 'Telur') {
                                 $('#satuanTelur').show();
                                 $('#satuanTelurLabel').show();
 

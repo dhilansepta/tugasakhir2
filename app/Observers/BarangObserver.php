@@ -77,7 +77,7 @@ class BarangObserver
 
         //Jika update harga jual barang, maka update laporan penjualan
         if ($barang->stok <= 5) {
-            Notification::send($users, new StokNotification($barang->id, $barang->stok));
+            Notification::send($users, new StokNotification($barang->id, $barang->stok, $barang->satuan->satuan));
         } else {
             foreach ($users as $user) {
                 $notifications = $user->notifications()
@@ -104,7 +104,7 @@ class BarangObserver
 
         //Jika update harga jual barang, maka update laporan penjualan
         if ($barang->stok <= 5) {
-            Notification::send($users, new StokNotification($barang->id, $barang->stok));
+            Notification::send($users, new StokNotification($barang->id, $barang->stok, $barang->satuan->satuan));
         } else {
             foreach ($users as $user) {
                 $notifications = $user->notifications()

@@ -126,7 +126,7 @@
 
                             let nama_barang = data.nama_barang;
                             console.log(nama_barang);
-                            if (nama_barang === 'Telur') {
+                            if (nama_barang.toLowerCase().includes('telur')) {
                                 $('#satuanTelur').show();
                                 $('#satuanTelurLabel').show();
 

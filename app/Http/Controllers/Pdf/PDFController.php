@@ -74,7 +74,7 @@ class PDFController extends Controller
         // Mengambil data dari sesi
         $laporanStok = session('laporanStok', collect());
         $tanggal = session('tanggal', collect());
-
+        
         $data = [
             'laporanStok' => $laporanStok,
             'tanggal' => $tanggal,

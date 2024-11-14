@@ -26,7 +26,7 @@
                 <div class="mt-2">
                     <button
                         type="button"
-                        class="btn btn-primary ms-auto"
+                        class="btn btn-light ms-auto"
                         style="width: 80px;">
                         Unduh
                     </button>

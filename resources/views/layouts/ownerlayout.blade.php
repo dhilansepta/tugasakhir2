@@ -50,8 +50,8 @@
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
-                <a href="#" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary">SITOKU</h3>
+                <a href="{{route('owner.dashboard')}}" class="navbar-brand mx-4 mb-3">
+                    <img src="{{ asset('dark/img/logositoku.png') }}" alt="Logo" style="height: 60px;">
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
@@ -105,7 +105,7 @@
             <!-- Navbar Start -->
             <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
                 <a href="#" class="navbar-brand d-flex d-lg-none me-4">
-                    <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
+                    <img src="{{ asset('dark/img/logositoku.png') }}" alt="Logo" style="height: 60px;">
                 </a>
                 <a href="#" class="sidebar-toggler flex-shrink-0">
                     <i class="fa fa-bars"></i>
@@ -120,22 +120,30 @@
                             <i class="fa fa-bell me-lg-2"></i>
                             <span class="d-none d-lg-inline-flex">Notification</span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                            @if(auth()->user()->notifications->isNotEmpty())
+                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0 justify-content-between">
+                            <div>
+                                @if(auth()->user()->notifications->isNotEmpty())
                                 @foreach (auth()->user()->notifications as $notification)
                                 <a href="#" class="dropdown-item">
-                                    <li class="fw-normal mb-0"> {{$notification->data['data']}}</li>
+                                    <div class="d-flex flex-row justify-content-start align-items-center">
+                                        <i class="fa fa-bell me-lg-2"></i>
+                                        <li class="fw-normal mb-0"> {{$notification->data['data']}}</li>
+                                    </div>
                                 </a>
                                 <hr class="dropdown-divider">
                                 @endforeach
-                            @else
+                                @else
                                 <a href="#" class="dropdown-item">
                                     <li class="fw-normal mb-0">Tidak Ada Notifikasi</li>
                                 </a>
                                 <hr class="dropdown-divider">
-                            @endif
-                            <hr class="dropdown-divider">
-                            <a href="{{route('owner.daftarbarang')}}" class="dropdown-item text-center">Periksa Daftar Barang</a>
+                                @endif
+                            </div>
+
+                            <div>
+                                <hr class="dropdown-divider">
+                                <a href="{{route('owner.daftarbarang')}}" class="dropdown-item text-center " style="background-color:var(--secondary)">Periksa Daftar Barang</a>
+                            </div>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
@@ -144,7 +152,7 @@
                             <span class="d-none d-lg-inline-flex">{{Auth::user()->name}}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">My Profile</a>
+                            <a href="{{route('owner.kelolaakun')}}" class="dropdown-item">Kelola Akun</a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <a href="route('logout')" class="dropdown-item" onclick="event.preventDefault(); this.closest('form').submit();">
@@ -160,7 +168,7 @@
             @yield('content')
 
             <!-- Footer Start -->
-            <div class="container-fluid pt-4 px-4">
+            <div class="container-fluid pt-4 px-4 py-0">
                 <div class="bg-secondary rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">

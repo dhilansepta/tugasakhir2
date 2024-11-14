@@ -42,10 +42,13 @@ class Select2Controller extends Controller
         $kategori = $item->kategori; // Assuming there's a relationship defined in the Barang model
         $nama_barang = $item->nama_barang;
 
+        $TelurQuery = Barang::where('nama_barang', 'LIKE', '%telur%');
+
         return response()->json([
             'satuan' => $satuan ? $satuan->satuan : null, // Adjust this based on your model
             'kategori' => $kategori ? $kategori->kategori : null, // Adjust this based on your model
-            'nama_barang' => $nama_barang
+            'nama_barang' => $nama_barang,
+            'TelurFinder' => $TelurQuery
         ]);
     }
 }

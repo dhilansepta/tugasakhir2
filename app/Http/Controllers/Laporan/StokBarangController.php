@@ -15,6 +15,7 @@ class StokBarangController extends Controller
     {
         $filterTanggal = $request->input('filterTanggal');
         $filterSearch = $request->input('filterSearch');
+        $sortBy = $request->input('sort_by');
 
         $today = Carbon::today();
         $laporanStokQuery = LaporanStokBarang::query();
@@ -35,6 +36,13 @@ class StokBarangController extends Controller
             });
         }
 
+        if ($sortBy) {
+            if ($sortBy == 'id') {
+                $barang = $laporanStokQuery->orderBy($sortBy, 'asc')->get();
+            }
+            $barang = $laporanStokQuery->orderBy($sortBy, 'desc')->get();
+        }
+
 
         $totalRetur = DB::table('retur_barang')
             ->select('barang_id', DB::raw('SUM(jumlah) as total_retur'))
@@ -42,8 +50,10 @@ class StokBarangController extends Controller
             ->groupBy('barang_id')
             ->pluck('total_retur', 'barang_id');
 
-        $laporanStok = $laporanStokQuery->orderBy('id', 'asc')->get();
-        session(['laporanStok' => $laporanStok]);
+        $laporanStokDownload = $laporanStokQuery->orderBy('id', 'asc')->get();
+        $laporanStok = $laporanStokQuery->orderBy('id', 'asc')->paginate(perPage: 5)->appends($request->all());
+
+        session(['laporanStok' => $laporanStokDownload]);
         return view('owner.stokbarang', compact('laporanStok', 'totalRetur'));
     }
 

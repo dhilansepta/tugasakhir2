@@ -18,16 +18,7 @@ use App\Http\Controllers\Manage\ReturBarangManagementController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('login');
-});
-
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
-
-
-Route::get('/owner/dashboard', function () {
-    return view('owner.dashboard');
-})->middleware(['auth', 'verified'])->name('owner.dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -77,6 +68,7 @@ Route::get('/viewLaporan', [PDFController::class, 'viewLaporan'])->name('pdf.lap
 Route::get('/data-dashboard', [DashboardController::class, 'getData']);
 
 Route::post('/import-barang', [BarangManagementController::class, 'ImportDaftarBarang'])->name('import-barang');
+Route::get('/export-barang', [BarangManagementController::class, 'ExportDaftarBarang'])->name('export-barang');
 
 //Karyawan Routes
 Route::middleware(['auth', 'karyawanMiddleware'])->group(function () {

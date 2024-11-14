@@ -16,7 +16,7 @@
             <!-- <a href="{{route('pdf.laporanPenjualan')}}">Test</a> -->
             <button
                 type="button"
-                class="btn btn-primary rounded-pill ms-auto"
+                class="btn btn-light ms-auto"
                 style="width: 80px;"
                 onclick="window.location.href='<?= $downloadUrl ?>';">
                 Unduh
@@ -42,6 +42,12 @@
                             placeholder="Cari Nama Barang"
                             value="{{ request('filterSearch') }}"
                             style="width: 150px; border-color:var(--tertiary)">
+
+                        <select name="sort_by" class="form-select form-select-sm me-2" style="width: 150px; border-color:var(--tertiary)" onchange="this.form.submit()">
+                            <option value="" disabled selected>Sort By</option>
+                            <option value="id" {{ request('sort_by') === 'id' ? 'selected' : '' }}>ID</option>
+                            <option value="pendapatan_kotor" {{ request('sort_by') === 'pendapatan_kotor' ? 'selected' : '' }}>Pendapatan Kotor</option>
+                        </select>
 
                         <input
                             class="form-control form-control-sm me-2"
@@ -101,6 +107,7 @@
                         @endforelse
                     </tbody>
                 </table>
+                {{$laporanPenjualan->links()}}
             </div>
         </div>
     </div>

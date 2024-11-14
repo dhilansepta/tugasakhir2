@@ -73,12 +73,12 @@ class BarangKeluarManagementController extends Controller
         }
 
         if (Auth::user()->role == 'Owner') {
-            $barangkeluar = $barangKeluarQuery->orderBy('id', 'asc')->get();
+            $barangkeluar = $barangKeluarQuery->orderBy('id', 'asc')->paginate(perPage: 10)->appends($request->all());
             perPage:
             return view('owner.barangkeluar', compact('barang', 'karyawan', 'barangkeluar'));
         } elseif (Auth::user()->role == 'Karyawan') {
             $barangKeluarQuery->where('karyawan_id', Auth::user()->id);
-            $barangkeluar = $barangKeluarQuery->orderBy('id', 'asc')->get();
+            $barangkeluar = $barangKeluarQuery->orderBy('id', 'asc')->paginate(perPage: 10)->appends($request->all());
             return view('karyawan.barangkeluar', compact('barang', 'barangkeluar'));
         }
     }
