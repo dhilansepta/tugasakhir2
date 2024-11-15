@@ -79,6 +79,6 @@ class StokBarangController extends Controller
             'stok_minus' => $totalStokGudang - $laporan->stok_akhir
         ]);
 
-        return redirect()->route('owner.stokbarang')->with('success', 'Data berhasil diperbarui');
+        return redirect()->back()->with('success', 'Data berhasil diperbarui');
     }
 }

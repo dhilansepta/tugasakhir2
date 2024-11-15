@@ -8,6 +8,15 @@
 
 <div class="container-fluid pt-4 px-4">
     <div class="g-4">
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @elseif (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
         <div class="d-flex flex-row align-items-end justify-content-between">
             <h3 id="judul">Data Kategori Barang</h3>
             <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#tambahKategoriModal">
@@ -46,9 +55,6 @@
                                     data-id="{{ $data->id }}"
                                     data-name="{{ $data->kategori }}">
                                     Edit
-                                </a>
-                                <a class="btn btn-sm btn-warning mx-2 btn-danger">
-                                    Delete
                                 </a>
                             </td>
                         </tr>

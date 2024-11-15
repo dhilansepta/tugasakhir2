@@ -14,7 +14,7 @@ class AccountManagementController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:' . User::class],
+            'username' => ['required', 'string', 'max:255', 'unique:users,username'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'string', 'in:Owner,Karyawan'],
             'status' => ['required', 'string', 'in:Aktif,Non_Aktif']
@@ -29,19 +29,6 @@ class AccountManagementController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Akun berhasil dibuat');
-    }
-
-    public function edit($id)
-    {
-        $user = User::find($id);
-
-        // Jika user tidak ditemukan, berikan response atau redirect dengan error
-        if (!$user) {
-            return redirect()->route('owner.kelolaakun')->with('error', 'User tidak ditemukan.');
-        }
-
-        // Jika user ditemukan, tampilkan view edit dan kirim data user
-        return view('owner.kelolaakun', compact('user'));
     }
 
     public function viewAkun()

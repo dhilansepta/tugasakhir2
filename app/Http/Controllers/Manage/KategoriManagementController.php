@@ -40,13 +40,4 @@ class KategoriManagementController extends Controller
 
         return redirect()->route('owner.kategoribarang')->with('success', 'Kategori berhasil diperbarui');
     }
-
-    public function destroy($id){
-        $kategori = Kategori::findOrFail($id);
-
-        $kategori->delete();
-
-        // Redirect dengan pesan sukses
-        return redirect()->back()->with('success', 'Data Kategori berhasil dihapus.');
-    }
 }

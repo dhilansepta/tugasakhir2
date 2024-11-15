@@ -40,15 +40,4 @@ class SatuanManagementController extends Controller
 
         return redirect()->route('owner.satuanbarang')->with('success', 'Satuan berhasil diperbarui');
     }
-
-    public function destroy($id)
-    {
-        // Cari data barangmasuk berdasarkan ID
-        $satuan = Satuan::findOrFail($id);
-
-        $satuan->delete();
-
-        // Redirect dengan pesan sukses
-        return redirect()->back()->with('success', 'Data Satuan berhasil dihapus.');
-    }
 }

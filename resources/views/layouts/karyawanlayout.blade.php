@@ -148,5 +148,4 @@
     <!-- Template Javascript -->
     <script src="{{asset('dark')}}/js/main.js"></script>
 </body>
-
 </html>

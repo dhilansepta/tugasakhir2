@@ -39,7 +39,7 @@
                         <input type="number" class="form-control" id="harga_jual" name="harga_jual" required>
                     </div>
                     <div class="mb-3">
-                        <label for="keuntungan" class="form-label">Keuntungan Persatuan</label>
+                        <label for="keuntungan" class="form-label">Keuntungan Persatuan (Tidak Boleh 0 atau < 0)</label>
                         <input type="number" class="form-control" id="keuntungan" name="keuntungan" readonly>
                     </div>
                     <div class="mb-3">

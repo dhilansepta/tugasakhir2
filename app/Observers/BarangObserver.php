@@ -90,7 +90,6 @@ class BarangObserver
                 }
             }
         }
-
         $barang->save();
         $laporanStokBarang->save();
     }
@@ -102,7 +101,6 @@ class BarangObserver
     {
         $users = User::where('role', 'Owner')->get();
 
-        //Jika update harga jual barang, maka update laporan penjualan
         if ($barang->stok <= 5) {
             Notification::send($users, new StokNotification($barang->id, $barang->stok, $barang->satuan->satuan));
         } else {

@@ -38,9 +38,9 @@
 </head>
 
 <body>
-    <div class="container-fluid position-relative d-flex flex-column min-vh-100 p-0">
+    <div class="container-fluid position-relative d-flex p-0">
         <!-- Spinner Start -->
-        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div id="spinner" class="bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
@@ -105,14 +105,14 @@
             <!-- Navbar Start -->
             <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
                 <a href="#" class="navbar-brand d-flex d-lg-none me-4">
-                    <img src="{{ asset('dark/img/logositoku.png') }}" alt="Logo" style="height: 60px;">
+                    <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
                 </a>
                 <a href="#" class="sidebar-toggler flex-shrink-0">
                     <i class="fa fa-bars"></i>
                 </a>
                 <div class="ms-3 d-flex flex-column align-items-start">
-                    <span> Sistem Inventori</span>
-                    <span> @yield('title')</span>
+                    <span class="inventory-title"> Sistem Inventori</span>
+                    <span class="inventory-subtitle"> @yield('title')</span>
                 </div>
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
@@ -121,28 +121,31 @@
                             <span class="d-none d-lg-inline-flex">Notification</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0 justify-content-between">
-                            <div>
-                                @if(auth()->user()->notifications->isNotEmpty())
-                                @foreach (auth()->user()->notifications as $notification)
-                                <a href="#" class="dropdown-item">
-                                    <div class="d-flex flex-row justify-content-start align-items-center">
-                                        <i class="fa fa-bell me-lg-2"></i>
-                                        <li class="fw-normal mb-0"> {{$notification->data['data']}}</li>
-                                    </div>
-                                </a>
-                                <hr class="dropdown-divider">
-                                @endforeach
-                                @else
-                                <a href="#" class="dropdown-item">
-                                    <li class="fw-normal mb-0">Tidak Ada Notifikasi</li>
-                                </a>
-                                <hr class="dropdown-divider">
-                                @endif
-                            </div>
+                            <div class="d-flex flex-column align-items-stretch" style="height: 200px;">
+                                <div class="d-flex flex-column" style="overflow-y:scroll;">
+                                    @if(auth()->user()->notifications->isNotEmpty())
+                                    @foreach (auth()->user()->notifications as $notification)
+                                    <a href="#" class="dropdown-item">
+                                        <div class="d-flex flex-row justify-content-start align-items-center">
+                                            <i class="fa fa-bell me-2"></i>
+                                            <li class="fw-normal mb-0"> {{$notification->data['data']}}</li>
+                                        </div>
+                                    </a>
+                                    <hr class="dropdown-divider">
+                                    @endforeach
+                                    @else
+                                    <a href="#" class="dropdown-item">
+                                        <li class="fw-normal mb-0">Tidak Ada Notifikasi</li>
+                                    </a>
+                                    <hr class="dropdown-divider">
+                                    @endif
+                                </div>
 
-                            <div>
-                                <hr class="dropdown-divider">
-                                <a href="{{route('owner.daftarbarang')}}" class="dropdown-item text-center " style="background-color:var(--secondary)">Periksa Daftar Barang</a>
+
+                                <div class="d-flex flex-column align-items-stretch">
+                                    <hr class="dropdown-divider">
+                                    <a href="{{route('owner.daftarbarang')}}" class="dropdown-item text-center " style="background-color:var(--secondary)">Periksa Daftar Barang</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -171,7 +174,7 @@
             <div class="container-fluid pt-4 px-4 py-0">
                 <div class="bg-secondary rounded-top p-4">
                     <div class="row">
-                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                        <div class="text-center text-sm-start">
                             Copyright &copy; 2024 <a class="copyright" href="#">Toko Kurnia</a>, All Right Reserved.
                         </div>
                     </div>

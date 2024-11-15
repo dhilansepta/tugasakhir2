@@ -46,7 +46,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="edit_keuntungan" class="form-label">Keuntungan Persatuan</label>
+                        <label for="edit_keuntungan" class="form-label">Keuntungan Persatuan (Tidak boleh 0 atau < 0)</label>
                         <input type="number" class="form-control" id="edit_keuntungan" name="keuntungan" readonly>
                     </div>
 

@@ -27,31 +27,31 @@ class BarangManagementController extends Controller
             'stok' => ['nullable', 'integer', 'min:0'],
         ]);
 
-        $barang = Barang::where('nama_barang', $request->nama_barang);
+        $barang = Barang::where('nama_barang', $request->nama_barang)->first();
 
-        if($barang){
-            return redirect()->back()->with('error', 'Gagal Input Data, Karena data barang '. $request->nama_barang .' Sudah Terdapat Dalam Database');
+        if ($barang) {
+            return redirect()->back()->with('error', 'Gagal Input Data, Karena data barang ' . $request->nama_barang . ' Sudah Terdapat Dalam Database');
         }
 
         $keuntungan = $request->keuntungan ?? ($request->harga_jual - $request->harga_beli);
 
         if ($keuntungan <= 0) {
             return redirect()->back()->with('error', 'Gagal Input Data karena, Keuntungan Barang = 0 atau kurang dari 0');
-        } else {
-            $barang = Barang::create([
-                'nama_barang' => $request->nama_barang,
-                'kategori_id' => $request->kategori_id,
-                'satuan_id' => $request->satuan_id,
-                'harga_beli' => $request->harga_beli,
-                'harga_jual' => $request->harga_jual,
-                'keuntungan' => $keuntungan,
-                'stok' => $request->stok ?? 0,
-            ]);
-
-            $barang->save();
-
-            return redirect()->back()->with('success', 'Data berhasil dibuat');
         }
+
+        $barang = Barang::create([
+            'nama_barang' => $request->nama_barang,
+            'kategori_id' => $request->kategori_id,
+            'satuan_id' => $request->satuan_id,
+            'harga_beli' => $request->harga_beli,
+            'harga_jual' => $request->harga_jual,
+            'keuntungan' => $keuntungan,
+            'stok' => $request->stok ?? 0,
+        ]);
+
+        $barang->save();
+
+        return redirect()->back()->with('success', 'Data berhasil dibuat');
     }
 
     public function viewBarang(Request $request)
@@ -93,6 +93,10 @@ class BarangManagementController extends Controller
         ]);
 
         $keuntungan = $request->keuntungan ?? ($request->harga_jual - $request->harga_beli);
+        
+        if ($keuntungan <= 0) {
+            return redirect()->back()->with('error', 'Gagal Input Data karena, Keuntungan Barang = 0 atau kurang dari 0');
+        }
 
         $barang->update([
             'nama_barang' => $request->nama_barang,
@@ -108,7 +112,6 @@ class BarangManagementController extends Controller
             'harga_persatuan' => $barang->harga_beli,
         ];
 
-        // Update the latest record for the specific `barang_id`
         DB::table('harga_beli_version')
             ->where('barang_id', $barang->id)
             ->update($dataHargaBeliVersion);
@@ -148,7 +151,7 @@ class BarangManagementController extends Controller
         }
     }
 
-    public function ExportDaftarBarang(Request $request) 
+    public function ExportDaftarBarang(Request $request)
     {
         return Excel::download(new DaftarBarangExport, 'daftarBarang.xlsx');
     }

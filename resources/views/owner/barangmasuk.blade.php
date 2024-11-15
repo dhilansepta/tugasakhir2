@@ -7,6 +7,15 @@
 @section('content')
 <div class="container-fluid pt-4 px-4">
     <div class="g-4">
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @elseif (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
         <div class="d-flex flex-row align-items-center justify-content-between">
             <div>
                 <h3>Data Barang Masuk</h3>
@@ -149,7 +158,7 @@
 
                 // Set action URL untuk form
                 var form = document.getElementById('deleteBarangForm');
-                form.action = '/owner/delete-barangmasuk/' + dataId;
+                form.action = '/delete-barangmasuk/' + dataId;
             });
         });
 

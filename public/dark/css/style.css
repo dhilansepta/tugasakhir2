@@ -14,19 +14,14 @@
     z-index: 9999999 !important;
 }
 
-.col-sm-6, .col-xl-3 {
-    height: 100%;
-}
-
-#judul{
-    margin-top: 0rem;
-}
 .bg-secondary{
     background-color: var(--secondary);
 }
+
 .modal-content{
     background-color: var(--secondary);
 }
+
 .form-control, .form-select{
     background-color: var(--background);
     color: var(--font);
@@ -40,10 +35,6 @@ h1,h2,h3,h4,h5,h6 {
     color: var(--font);
 }
 
-.h6{
-    color: var(--font);
-}
-
 .copyright{
     font-weight: bold;
 }
@@ -52,9 +43,6 @@ h1,h2,h3,h4,h5,h6 {
     color: var(--background);
 }
 
-a:hover {
-    color: var(--background);
-}
 
 .back-to-top {
     position: fixed;

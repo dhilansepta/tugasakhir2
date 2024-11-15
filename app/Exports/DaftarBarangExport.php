@@ -35,7 +35,6 @@ class DaftarBarangExport implements FromQuery, WithHeadings
     public function headings(): array
     {
         return [
-            "id",
             "nama_barang",
             "kategori",
             "satuan",

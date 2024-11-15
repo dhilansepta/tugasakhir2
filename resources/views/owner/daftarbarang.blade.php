@@ -7,12 +7,16 @@
 @section('content')
 <?php $downloadUrl = route('export-barang'); ?>
 <div class="container-fluid pt-4 px-4">
-    @if (session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-    @endif
     <div class="g-4">
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @elseif (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
         <div class="d-flex flex-row align-items-center justify-content-between">
             <h3 id="judul">Data Barang</h3>
             <div class="d-flex flex-column align-items-end justify-content-start">
@@ -105,9 +109,6 @@
                                     data-keuntungan="{{ $data->keuntungan }}"
                                     data-stok="{{ $data->stok }}">
                                     Edit
-                                </a>
-                                <a class="btn btn-sm btn-danger mx-2 btn-delete">
-                                    Delete
                                 </a>
                             </td>
                         </tr>

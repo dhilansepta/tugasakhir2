@@ -27,7 +27,7 @@ class DaftarBarangImport implements ToCollection, WithHeadingRow
             $barang = Barang::where('nama_barang', $row['nama_barang'])->first();
 
             if($barang){
-                throw new \Exception("Gagal Input Data Barang, Karena " . json_encode($row["nama_barang"] . " Sudah Terdapat Dalam Database"));
+                throw new \Exception("Gagal Input Data Barang, Karena Data barang " . json_encode($row["nama_barang"] . " Sudah Terdapat Dalam Database"));
             }
 
             // Cek jika ada kolom yang null pada baris ini
