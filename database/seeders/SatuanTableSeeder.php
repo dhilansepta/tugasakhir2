@@ -22,11 +22,11 @@ class SatuanTableSeeder extends Seeder
         ]);
 
         Satuan::create([
-            'satuan' => 'Bal'
+            'satuan' => 'Ball'
         ]);
 
         Satuan::create([
-            'satuan' => 'Butir'
+            'satuan' => 'Jerigen'
         ]);
     }
 }

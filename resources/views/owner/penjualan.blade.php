@@ -22,7 +22,6 @@
         </div>
 
         <div class="d-flex flex-row align-items-center justify-content-between mt-2">
-            <!-- <a href="{{route('pdf.laporanPenjualan')}}">Test</a> -->
             <button
                 type="button"
                 class="btn btn-light ms-auto"
@@ -33,16 +32,24 @@
         </div>
 
         <div class="d-flex flex-column bd-highlight bg-secondary rounded p-3 mt-2">
-            <div class="d-flex flex-row align-items-end justify-content-between mb-2">
-                <div>
-                    Data Tanggal
-                    <span style="font-weight:bold">
-                        {{ request('filterTanggal') ? \Carbon\Carbon::parse(request('filterTanggal'))->format('d M Y') : now()->format('d M Y') }}
-                    </span>
-                </div>
+            <div>
+                Laporan Tanggal
+                <span style="font-weight:bold">
+                    {{ request('filterTanggal') ? \Carbon\Carbon::parse(request('filterTanggal'))->format('d M Y') : now()->format('d M Y') }}
+                </span>
+            </div>
 
-                <form action="{{ route('owner.penjualan') }}" method="GET" class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
+            <div class="d-flex flex-row align-items-end justify-content-end mb-2">
+                <form action="{{ route('owner.penjualan') }}" method="GET" class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="form-group mb-0">
+                        <select name="sort_by" class="form-select form-select-sm me-2" style="min-width: 120px; border-color:var(--tertiary)" onchange="this.form.submit()">
+                            <option value="" disabled selected>Sort By</option>
+                            <option value="id" {{ request('sort_by') === 'id' ? 'selected' : '' }}>ID</option>
+                            <option value="pendapatan_kotor" {{ request('sort_by') === 'pendapatan_kotor' ? 'selected' : '' }}>Pendapatan Kotor</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-0">
                         <input
                             class="form-control form-control-sm me-2"
                             id="filterSearch"
@@ -50,26 +57,24 @@
                             name="filterSearch"
                             placeholder="Cari Nama Barang"
                             value="{{ request('filterSearch') }}"
-                            style="width: 150px; border-color:var(--tertiary)">
+                            style="min-width: 150px; border-color:var(--tertiary)">
+                    </div>
 
-                        <select name="sort_by" class="form-select form-select-sm me-2" style="width: 150px; border-color:var(--tertiary)" onchange="this.form.submit()">
-                            <option value="" disabled selected>Sort By</option>
-                            <option value="id" {{ request('sort_by') === 'id' ? 'selected' : '' }}>ID</option>
-                            <option value="pendapatan_kotor" {{ request('sort_by') === 'pendapatan_kotor' ? 'selected' : '' }}>Pendapatan Kotor</option>
-                        </select>
-
+                    <div class="form-group mb-0">
                         <input
                             class="form-control form-control-sm me-2"
                             id="filterTanggal"
                             type="date"
                             name="filterTanggal"
                             value="{{ request('filterTanggal') }}"
-                            style="width: 150px; border-color:var(--tertiary)">
+                            style="min-width: 150px; border-color:var(--tertiary)">
+                    </div>
 
+                    <div class="form-group mb-0">
                         <button
                             type="submit"
                             class="btn btn-primary btn-sm"
-                            style="width: 50px;">
+                            style="min-width: 50px;">
                             Cari
                         </button>
                         <a href="{{ route('owner.penjualan') }}" class="btn btn-danger btn-sm ms-2" style="width: 50px;">

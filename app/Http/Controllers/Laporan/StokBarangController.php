@@ -51,7 +51,7 @@ class StokBarangController extends Controller
             ->pluck('total_retur', 'barang_id');
 
         $laporanStokDownload = $laporanStokQuery->orderBy('id', 'asc')->get();
-        $laporanStok = $laporanStokQuery->orderBy('id', 'asc')->paginate(perPage: 5)->appends($request->all());
+        $laporanStok = $laporanStokQuery->orderBy('id', 'asc')->paginate(perPage: 10)->appends($request->all());
 
         session(['laporanStok' => $laporanStokDownload]);
         return view('owner.stokbarang', compact('laporanStok', 'totalRetur'));

@@ -43,7 +43,7 @@
         @include('layouts.partials.modaledit.barangmasuk')
 
         <div class="d-flex flex-column bd-highlight bg-secondary rounded p-3 mt-2">
-            <div class="d-flex flex-row align-items-end justify-content-between mb-2">
+            <div class="d-flex flex-wrap align-items-end justify-content-between mb-2 gap-2">
                 <div>
                     Data Tanggal
                     <span style="font-weight:bold">
@@ -51,8 +51,8 @@
                     </span>
                 </div>
 
-                <form action="{{ route('owner.barangmasuk') }}" method="GET" class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
+                <form action="{{ route('owner.barangmasuk') }}" method="GET" class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="form-group mb-0">
                         <input
                             class="form-control form-control-sm me-2"
                             id="filterSearch"
@@ -61,7 +61,8 @@
                             placeholder="Cari..."
                             value="{{ request('filterSearch') }}"
                             style="width: 150px; border-color:var(--tertiary)">
-
+                    </div>
+                    <div class="form-group mb-0 d-flex gap-2">
                         <input
                             class="form-control form-control-sm me-2"
                             id="filterTanggal"

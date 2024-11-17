@@ -34,10 +34,10 @@
         @include('layouts.partials.modaledit.returbarang')
 
         <div class="d-flex flex-column bd-highlight bg-secondary rounded p-3 mt-3">
-            <div class="d-flex flex-row align-items-end justify-content-end mb-2">
-                <form action="{{ route('owner.returbarang') }}" method="GET" class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <select name="filterShow" class="form-select form-select-sm me-2" style="width: 200px; border-color:var(--tertiary)" onchange="this.form.submit()">
+            <div class="d-flex flex-wrap align-items-end justify-content-end mb-2 gap-2">
+                <form action="{{ route('owner.returbarang') }}" method="GET" class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="form-group mb-0">
+                        <select name="filterShow" class="form-select form-select-sm me-2" style="min-width: 110px; border-color:var(--tertiary)" onchange="this.form.submit()">
                             <option value="" disabled selected>Jenis Status</option>
                             <option value="expired" {{ request('filterShow') === 'expired' ? 'selected' : '' }}>Expired</option>
                             <option value="rusak" {{ request('filterShow') === 'rusak' ? 'selected' : '' }}>Rusak</option>

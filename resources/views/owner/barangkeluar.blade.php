@@ -6,16 +6,16 @@
 
 @section('content')
 <div class="container-fluid pt-4 px-4">
-    @if (session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-    @elseif (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-    @endif
     <div class="g-4">
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @elseif (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
         <div class="d-flex flex-row align-items-center justify-content-between">
             <div>
                 <h3>Data Barang Keluar</h3>
@@ -43,7 +43,7 @@
         @include('layouts.partials.modaledit.barangkeluar')
 
         <div class="d-flex flex-column bd-highlight bg-secondary rounded p-3 mt-3">
-            <div class="d-flex flex-row align-items-end justify-content-between mb-2">
+            <div class="d-flex flex-wrap align-items-end justify-content-between mb-2 gap-2">
                 <div>
                     Data Tanggal
                     <span style="font-weight:bold">
@@ -51,17 +51,18 @@
                     </span>
                 </div>
 
-                <form action="{{ route('owner.barangkeluar') }}" method="GET" class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
+                <form action="{{ route('owner.barangkeluar') }}" method="GET" class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="form-group mb-0">
                         <input
-                            class="form-control form-control-sm me-2"
+                            class="form-control form-control-sm"
                             id="filterSearch"
                             type="text"
                             name="filterSearch"
                             placeholder="Cari..."
                             value="{{ request('filterSearch') }}"
                             style="width: 150px; border-color:var(--tertiary)">
-
+                    </div>
+                    <div class="form-group mb-0 d-flex gap-2">
                         <input
                             class="form-control form-control-sm me-2"
                             id="filterTanggal"
@@ -82,6 +83,7 @@
                     </div>
                 </form>
             </div>
+
             <div class="table-responsive">
                 <table class="table">
                     <thead>

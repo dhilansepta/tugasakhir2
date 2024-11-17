@@ -37,34 +37,33 @@
         @include('layouts.partials.modaladd.importbarang')
 
         <div class="d-flex flex-column bd-highlight bg-secondary rounded p-3 mt-2">
-            <div class="d-flex flex-row align-items-end justify-content-end mb-2">
-                <form action="{{ route('owner.daftarbarang') }}" method="GET" class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <select name="sort_by" class="form-select form-select-sm me-2" style="width: 150px; border-color:var(--tertiary)" onchange="this.form.submit()">
+            <div class="d-flex flex-wrap align-items-end justify-content-end mb-2 gap-2">
+                <form action="{{ route('owner.daftarbarang') }}" method="GET" class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="form-group mb-0">
+                        <select name="sort_by" class="form-select form-select-sm" style="min-width: 120px; border-color:var(--tertiary)" onchange="this.form.submit()">
                             <option value="" disabled selected>Sort By</option>
                             <option value="id" {{ request('sort_by') === 'id' ? 'selected' : '' }}>ID</option>
                             <option value="stok" {{ request('sort_by') === 'stok' ? 'selected' : '' }}>Sisa Stok</option>
                         </select>
                     </div>
-
-                    <div class="d-flex align-items-center">
+                    <div class="form-group mb-0">
                         <input
-                            class="form-control form-control-sm me-2"
+                            class="form-control form-control-sm"
                             id="filterSearch"
                             type="text"
                             name="filterSearch"
                             placeholder="Cari Nama Barang"
                             value="{{ request('filterSearch') }}"
                             style="width: 150px; border-color:var(--tertiary)">
-
+                    </div>
+                    <div class="form-group mb-0 d-flex gap-2">
                         <button
                             type="submit"
                             class="btn btn-primary btn-sm"
-                            style="width: 50px;">
+                            style="min-width: 50px;">
                             Cari
                         </button>
-
-                        <a href="{{ route('owner.daftarbarang') }}" class="btn btn-danger btn-sm ms-2" style="width: 50px;">
+                        <a href="{{ route('owner.daftarbarang') }}" class="btn btn-danger btn-sm" style="min-width: 50px;">
                             Clear
                         </a>
                     </div>

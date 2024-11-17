@@ -13,7 +13,7 @@ class Barang extends Model
 
     use Notifiable;
     
-    protected $table = 'Barang';
+    protected $table = 'barang';
 
     protected $fillable = [
         'nama_barang',

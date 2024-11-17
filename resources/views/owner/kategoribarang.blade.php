@@ -19,7 +19,7 @@
         @endif
         <div class="d-flex flex-row align-items-end justify-content-between">
             <h3 id="judul">Data Kategori Barang</h3>
-            <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#tambahKategoriModal">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahKategoriModal">
                 Tambah Kategori
             </button>
         </div>
@@ -28,9 +28,27 @@
         @include('layouts.partials.modaledit.kategori')
 
         <div class="d-flex flex-column bd-highlight bg-secondary rounded p-3 mt-3">
-            <div class="d-flex flex-row align-items-end justify-content-between mb-2">
-                <div>
-                    Cari
+            <div class="d-flex flex-wrap align-items-end justify-content-end mb-2 gap-2">
+                <div class="form-group mb-0">
+                    <input
+                        class="form-control form-control-sm"
+                        id="filterSearch"
+                        type="text"
+                        name="filterSearch"
+                        placeholder="Cari..."
+                        value="{{ request('filterSearch') }}"
+                        style="width: 150px; border-color:var(--tertiary)">
+                </div>
+                <div class="form-group mb-0 d-flex">
+                    <button
+                        type="submit"
+                        class="btn btn-primary btn-sm"
+                        style="width: 50px;">
+                        Cari
+                    </button>
+                    <a href="{{ route('owner.barangkeluar') }}" class="btn btn-danger btn-sm ms-2" style="width: 50px;">
+                        Clear
+                    </a>
                 </div>
             </div>
             <div class="table-responsive">

@@ -17,84 +17,67 @@
             {{ session('success') }}
         </div>
         @endif
-        <div class="col-sm-6 col-xl-3">
-            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="height:120px;">
+
+        <!-- Revenue Cards -->
+        <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4 h-100">
                 <i class="fa fa-chart-line fa-3x text-primary"></i>
-                <div class="ms-3">
+                <div class="ms-3 text-end">
                     <p class="mb-2">Pendapatan Kotor</p>
-                    <h6 class="mb-0">Rp {{ number_format($pendapatanKotor, 0, ',', '.') }} </h6>
+                    <h6 class="mb-0">Rp {{ number_format($pendapatanKotor, 0, ',', '.') }}</h6>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="height:120px;">
+        <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4 h-100">
                 <i class="fa fa-chart-bar fa-3x text-primary"></i>
-                <div class="ms-3">
+                <div class="ms-3 text-end">
                     <p class="mb-2">Pendapatan Sebenarnya</p>
                     <h6 class="mb-0">Rp {{ number_format($pendapatanSebenarnya, 0, ',', '.') }}</h6>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="height:120px;">
+        <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4 h-100">
                 <i class="fa fa-area-chart fa-3x text-primary"></i>
-                <div class="ms-3">
+                <div class="ms-3 text-end">
                     <p class="mb-2">Pendapatan Bersih</p>
                     <h6 class="mb-0">Rp {{ number_format($pendapatanBersih, 0, ',', '.') }}</h6>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-3">
-            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="height:120px;">
+        <div class="col-12 col-sm-6 col-md-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4 h-100">
                 <i class="fa-solid fa-user fa-3x text-primary"></i>
-                <div class="ms-3">
+                <div class="ms-3 text-end">
                     <p class="mb-2">Jumlah Akun Karyawan</p>
-                    <h6 class="mb-0">{{$totalKaryawan}}</h6>
+                    <h6 class="mb-0">{{ $totalKaryawan }}</h6>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Sale & Revenue End -->
 
-<!-- Sales Chart Start -->
+<!-- Sales Chart -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
-        <div class="col-sm-12 col-xl-7">
+        <div class="col-12 col-xl-7">
             <div class="bg-secondary text-center rounded p-4">
                 <div class="d-flex align-items-center justify-content-between mb-4">
                     <h6 class="mb-0">Penjualan</h6>
-                    <a href="{{route('owner.penjualan')}}">Lihat Laporan Penjualan</a>
+                    <a href="{{ route('owner.penjualan') }}">Lihat Laporan Penjualan</a>
                 </div>
-                <p id="penjualan-message" style="display: none;">Data Tidak Tersedia</p>
+                <p id="penjualan-message" class="text-danger" style="display: none;">Data Tidak Tersedia</p>
                 <canvas id="laporan-penjualan"></canvas>
             </div>
         </div>
-        <div class="col-sm-12 col-xl-5">
+        <div class="col-12 col-xl-5">
             <div class="bg-secondary text-center rounded p-4">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <h6 class="mb-0">Stok Telur Ayam</h6>
-                    <a href="{{route('owner.stokbarang')}}">Lihat Laporan Stok Barang</a>
+                    <a href="{{ route('owner.stokbarang') }}">Lihat Laporan Stok Barang</a>
                 </div>
-                <!-- <form action="{{ route('owner.dashboard') }}" method="GET" class="d-flex align-items-center flex-row">
-                    <div class="d-flex align-items-center me-2">
-                        <select name="cari_telur" class="form-select form-select-sm mb-2" style="width: 150px; border-color:var(--tertiary)" onchange="this.form.submit()">
-                            <option value="" disabled selected>Cari Telur</option>
-                            @foreach ($telurs as $telur)
-                            <option value="{{$telur->id}}" {{ request('cari_telur') === 'id' ? 'selected' : '' }}>{{$telur->nama_barang}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="d-flex align-items-center me-2">
-                        <select name="unit" class="form-select form-select-sm mb-2" style="width: 150px; border-color:var(--tertiary)" onchange="this.form.submit()">
-                            <option value="" disabled selected>Pilih Satuan</option>
-                            <option value="Kilogram" {{ request('unit') === 'Kilogram' ? 'selected' : '' }}>Kilogram</option>
-                            <option value="Peti" {{ request('unit') === 'Peti' ? 'selected' : '' }}>Peti</option>
-                        </select>
-                    </div>
-                </form> -->
-                <p id="stok-message" style="display: none;">Data Tidak Tersedia</p>
+                <p id="stok-message" class="text-danger" style="display: none;">Data Tidak Tersedia</p>
                 <canvas id="stok-telur"></canvas>
             </div>
         </div>

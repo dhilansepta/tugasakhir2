@@ -36,33 +36,35 @@
 
 
         <div class="d-flex flex-column bd-highlight bg-secondary rounded p-3 mt-2">
-            <div class="d-flex flex-row align-items-end justify-content-between mb-2">
-                <div>
-                    Laporan Tanggal
-                    <span style="font-weight:bold">
-                        {{ request('filterTanggal') ? \Carbon\Carbon::parse(request('filterTanggal'))->format('d M Y') : now()->format('d M Y') }}
-                    </span>
-                </div>
-
-                <form action="{{ route('owner.stokbarang') }}" method="GET" class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <input
-                            class="form-control form-control-sm me-2"
-                            id="filterSearch"
-                            type="text"
-                            name="filterSearch"
-                            placeholder="Cari Nama Barang"
-                            value="{{ request('filterSearch') }}"
-                            style="width: 150px; border-color:var(--tertiary)">
-
-                        <select name="sort_by" class="form-select form-select-sm me-2" style="width: 150px; border-color:var(--tertiary)" onchange="this.form.submit()">
+            <div>
+                Laporan Tanggal
+                <span style="font-weight:bold">
+                    {{ request('filterTanggal') ? \Carbon\Carbon::parse(request('filterTanggal'))->format('d M Y') : now()->format('d M Y') }}
+                </span>
+            </div>
+            <div class="d-flex flex-column align-items-end justify-content-between mb-2 gap-2">
+                <form action="{{ route('owner.stokbarang') }}" method="GET" class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="form-group mb-0">
+                        <select name="sort_by" class="form-select form-select-sm" style="min-width: 120px; border-color:var(--tertiary)" onchange="this.form.submit()">
                             <option value="" disabled selected>Sort By</option>
                             <option value="id" {{ request('sort_by') === 'id' ? 'selected' : '' }}>ID</option>
                             <option value="stok_minus" {{ request('sort_by') === 'stok_minus' ? 'selected' : '' }}>Stok Minus</option>
                             <option value="stok_keluar" {{ request('sort_by') === 'stok_keluar' ? 'selected' : '' }}>Stok Keluar</option>
                             <option value="stok_masuk" {{ request('sort_by') === 'stok_masuk' ? 'selected' : '' }}>Stok Masuk</option>
                         </select>
+                    </div>
+                    <div class="form-group mb-0">
+                        <input
+                            class="form-control form-control-sm"
+                            id="filterSearch"
+                            type="text"
+                            name="filterSearch"
+                            placeholder="Cari Nama Barang"
+                            value="{{ request('filterSearch') }}"
+                            style="width: 150px; border-color:var(--tertiary)">
+                    </div>
 
+                    <div class="form-group mb-0">
                         <input
                             class="form-control form-control-sm me-2"
                             id="filterTanggal"
@@ -70,7 +72,9 @@
                             name="filterTanggal"
                             value="{{ request('filterTanggal') }}"
                             style="width: 150px; border-color:var(--tertiary)">
+                    </div>
 
+                    <div class="form-group mb-0">
                         <button
                             type="submit"
                             class="btn btn-primary btn-sm"

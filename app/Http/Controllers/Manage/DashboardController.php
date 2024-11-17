@@ -13,10 +13,6 @@ class DashboardController extends Controller
 {
     public function viewData(Request $request)
     {
-        $telurs = DB::table('barang')
-            ->where('nama_barang', 'LIKE', '%telur%')
-            ->get();
-
         $today = Carbon::today();
 
         $totalKaryawan = DB::table('users')
@@ -35,7 +31,7 @@ class DashboardController extends Controller
             ->whereDate('created_at', $today)
             ->sum('keuntungan');
 
-        return view('owner.dashboard', compact('totalKaryawan', 'pendapatanKotor', 'pendapatanSebenarnya', 'pendapatanBersih', 'telurs'));
+        return view('owner.dashboard', compact('totalKaryawan', 'pendapatanKotor', 'pendapatanSebenarnya', 'pendapatanBersih'));
     }
 
     public function getData(Request $request)
@@ -43,7 +39,6 @@ class DashboardController extends Controller
         
         $barangTelur = Barang::where('nama_barang', 'Telur Ayam')->first();
         $barangIdTelur = $barangTelur->id;
-        $unit = $request->input('unit');
 
         $datastokTelur = LaporanStokBarang::where('barang_id', $barangIdTelur)
             ->select(DB::raw('DATE(created_at) as tanggal'), DB::raw('SUM(stok_keluar) as stok_keluar'), DB::raw('SUM(stok_akhir) as stok_akhir'))

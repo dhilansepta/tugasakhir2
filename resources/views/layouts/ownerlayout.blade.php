@@ -121,7 +121,7 @@
                             <span class="d-none d-lg-inline-flex">Notification</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0 justify-content-between">
-                            <div class="d-flex flex-column align-items-stretch" style="height: 200px;">
+                            <div class="d-flex flex-column align-items-stretch" style="max-height: 200px; min-width:20rem">
                                 <div class="d-flex flex-column" style="overflow-y:scroll;">
                                     @if(auth()->user()->notifications->isNotEmpty())
                                     @foreach (auth()->user()->notifications as $notification)
