@@ -17,16 +17,16 @@ class DaftarBarangImport implements ToCollection, WithHeadingRow
      * @param Collection $rows
      * @throws \Exception
      */
+
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-
             // Hitung keuntungan
             $keuntungan = $row['harga_jual'] - $row['harga_beli'];
 
             $barang = Barang::where('nama_barang', $row['nama_barang'])->first();
 
-            if($barang){
+            if ($barang) {
                 throw new \Exception("Gagal Input Data Barang, Karena Data barang " . json_encode($row["nama_barang"] . " Sudah Terdapat Dalam Database"));
             }
 

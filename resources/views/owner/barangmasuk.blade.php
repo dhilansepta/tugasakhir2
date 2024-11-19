@@ -26,15 +26,6 @@
                         Tambah Data
                     </button>
                 </div>
-
-                <div class="mt-2">
-                    <button
-                        type="button"
-                        class="btn btn-light ms-auto"
-                        style="width: 80px;">
-                        Unduh
-                    </button>
-                </div>
             </div>
         </div>
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
 
 class AccountManagementController extends Controller
@@ -15,14 +16,19 @@ class AccountManagementController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:users,username'],
+            'email' => ['nullable', 'email', 'lowercase', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'string', 'in:Owner,Karyawan'],
             'status' => ['required', 'string', 'in:Aktif,Non_Aktif']
         ]);
 
+        $email = $request->role === 'Owner' ? $request->email : null;
+
         User::create([
             'name' => $request->name,
             'username' => $request->username,
+            'email' => $email,
+            Log::info('Email Afer Storing : ' . $email),
             'password' => Hash::make($request->password),
             'role' => $request->role,
             'status' => $request->status,
@@ -44,6 +50,7 @@ class AccountManagementController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:users,username,'.$id],
+            'email' => ['required','string', 'unique:users,email'],
             'role' => ['required', 'string', 'in:Owner,Karyawan'],
             'status' => ['required', 'string', 'in:Aktif,Non_Aktif'],
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()]
@@ -52,6 +59,7 @@ class AccountManagementController extends Controller
         $user->update([
             'name' => $request->name,
             'username' => $request->username,
+            'email' => $request->email,
             'role' => $request->role,
             'status' => $request->status,
         ]);

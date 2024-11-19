@@ -20,9 +20,17 @@ class SatuanManagementController extends Controller
         return redirect()->back()->with('success', 'Data berhasil dibuat');
     }
 
-    public function viewSatuan()
+    public function viewSatuan(Request $request)
     {
-        $satuan = Satuan::orderBy('id', 'asc')->get();
+        $filterSearch = $request->input('filterSearch');
+
+        $satuanQuery = Satuan::query();
+
+        if ($filterSearch) {
+            $satuanQuery->where('satuan', 'like', '%' . $filterSearch . '%');
+        }
+
+        $satuan = $satuanQuery->orderBy('id', 'asc')->paginate(10)->appends($request->all());
         return view('owner.satuanbarang', compact('satuan'));
     }
 

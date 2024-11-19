@@ -25,6 +25,10 @@
                         <input type="text" class="form-control" id="username" name="username" required>
                     </div>
                     <div class="mb-3">
+                        <label for="email" class="form-label" id="email-label" style="display:none;">Email (Untuk Recovery)</label>
+                        <input type="email" class="form-control" id="email" name="email" style="display: none;">
+                    </div>
+                    <div class="mb-3">
                         <label for="password" class="form-label">Password (Minimal 8 Karakter)</label>
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>
@@ -51,3 +55,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#role').on('change', function() {
+            if ($(this).val() === 'Owner') {
+                $('#email').show();
+                $('#email-label').show();
+                $('#email').prop('required', true); // Make email required when the role is Owner
+            } else {
+                $('#email').hide().val(''); // Clear email value and hide the field
+                $('#email-label').hide();
+                $('#email').prop('required', false); // Make email not required
+            }
+        });
+    });
+</script>

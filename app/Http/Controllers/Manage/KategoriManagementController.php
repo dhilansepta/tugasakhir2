@@ -20,9 +20,17 @@ class KategoriManagementController extends Controller
         return redirect()->back()->with('success', 'Data berhasil dibuat');
     }
 
-    public function viewKategori()
+    public function viewKategori(Request $request)
     {
-        $kategori = Kategori::orderBy('id', 'asc')->get();
+        $filterSearch = $request->input('filterSearch');
+
+        $kategoriQuery = Kategori::query();
+
+        if ($filterSearch) {
+            $kategoriQuery->where('kategori', 'like', '%' . $filterSearch . '%');
+        }
+
+        $kategori = $kategoriQuery->orderBy('id', 'asc')->paginate(10)->appends($request->all());
         return view('owner.kategoribarang', compact('kategori'));
     }
 

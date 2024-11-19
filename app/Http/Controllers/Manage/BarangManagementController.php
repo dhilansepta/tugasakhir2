@@ -135,6 +135,8 @@ class BarangManagementController extends Controller
             "file" => "required|mimes:xlsx"
         ]);
 
+        $request->merge(['is_import' => true]);
+        
         $file = $request->file("file")->store("import");
 
         DB::beginTransaction();

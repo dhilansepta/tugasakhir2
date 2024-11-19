@@ -29,27 +29,29 @@
 
         <div class="d-flex flex-column bd-highlight bg-secondary rounded p-3 mt-3">
             <div class="d-flex flex-wrap align-items-end justify-content-end mb-2 gap-2">
-                <div class="form-group mb-0">
-                    <input
-                        class="form-control form-control-sm"
-                        id="filterSearch"
-                        type="text"
-                        name="filterSearch"
-                        placeholder="Cari..."
-                        value="{{ request('filterSearch') }}"
-                        style="width: 150px; border-color:var(--tertiary)">
-                </div>
-                <div class="form-group mb-0 d-flex">
-                    <button
-                        type="submit"
-                        class="btn btn-primary btn-sm"
-                        style="width: 50px;">
-                        Cari
-                    </button>
-                    <a href="{{ route('owner.barangkeluar') }}" class="btn btn-danger btn-sm ms-2" style="width: 50px;">
-                        Clear
-                    </a>
-                </div>
+                <form action="{{route('owner.kategoribarang')}}" method="GET" class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="form-group mb-0">
+                        <input
+                            class="form-control form-control-sm"
+                            id="filterSearch"
+                            type="text"
+                            name="filterSearch"
+                            placeholder="Cari..."
+                            value="{{ request('filterSearch') }}"
+                            style="width: 150px; border-color:var(--tertiary)">
+                    </div>
+                    <div class="form-group mb-0 d-flex">
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-sm"
+                            style="width: 50px;">
+                            Cari
+                        </button>
+                        <a href="{{ route('owner.kategoribarang') }}" class="btn btn-danger btn-sm ms-2" style="width: 50px;">
+                            Clear
+                        </a>
+                    </div>
+                </form>
             </div>
             <div class="table-responsive">
                 <table class="table">
@@ -83,6 +85,7 @@
                         @endforelse
                     </tbody>
                 </table>
+                {{$kategori->links()}}
             </div>
         </div>
     </div>

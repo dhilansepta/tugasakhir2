@@ -14,6 +14,7 @@ class UserTableSeeder extends Seeder
         User::create([
             'name' => 'Alvira Sudirman',
             'username' => 'alvirasdrmn',
+            'email' => 'dhilan.septa100@gmail.com',
             'password' => Hash::make('alvira123'),
             'role' => 'Owner',
             'status' => 'Aktif',

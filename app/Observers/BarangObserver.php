@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Barang;
 use App\Models\User;
 use App\Models\LaporanStokBarang;
+use App\Notifications\BatchStokNotification;
 use Illuminate\Support\Facades\DB;
 use App\Notifications\StokNotification;
 use Illuminate\Support\Facades\Notification;
@@ -75,19 +76,21 @@ class BarangObserver
 
         $users = User::where('role', 'Owner')->get();
 
-        //Jika update harga jual barang, maka update laporan penjualan
-        if ($barang->stok <= 5) {
-            Notification::send($users, new StokNotification($barang->id, $barang->stok, $barang->satuan->satuan));
-        } else {
-            foreach ($users as $user) {
-                $notifications = $user->notifications()
-                    ->where('type', StokNotification::class)
-                    ->where('data->id_barang', $barang->id)
-                    ->get();
+        if (!request()->has('is_import')) {
 
-                foreach ($notifications as $notification) {
-                    $notification->delete();
-                }
+            // Jika bukan import (input manual), kirimkan notifikasi jika stok <= 5
+            $users = User::where('role', 'Owner')->get();
+
+            if ($barang->stok <= 5) {
+                Notification::send($users, new StokNotification($barang->id, $barang->stok, $barang->satuan->satuan));
+            }
+
+        } else {
+            //Jika melakukan import, kirimkan notifikasi ke email berbentuk rangkuman dan ke database satupersatu
+            $users = User::where('role', 'Owner')->get();
+
+            if ($barang->stok <= 5) {
+                Notification::send($users, new BatchStokNotification($barang->id, $barang->stok, $barang->satuan->satuan));
             }
         }
 
@@ -108,7 +111,6 @@ class BarangObserver
         } else {
             foreach ($users as $user) {
                 $notifications = $user->notifications()
-                    ->where('type', StokNotification::class)
                     ->where('data->id_barang', $barang->id)
                     ->get();
 

@@ -28,5 +28,9 @@ class SatuanTableSeeder extends Seeder
         Satuan::create([
             'satuan' => 'Jerigen'
         ]);
+
+        Satuan::create([
+            'satuan' => 'Renteng'
+        ]);
     }
 }
