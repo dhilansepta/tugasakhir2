@@ -71,7 +71,6 @@ class PDFController extends Controller
 
     public function downloadLaporanStok(): mixed
     {
-        // Mengambil data dari sesi
         $laporanStok = session('laporanStok', collect());
         $tanggal = session('tanggal', collect());
         
@@ -80,10 +79,8 @@ class PDFController extends Controller
             'tanggal' => $tanggal,
         ];
 
-        // Load view dengan data dan generate PDF
         $pdf = Pdf::loadView('pdf.laporanStok', $data)->setPaper('A4', 'landscape'); // A4 dengan orientasi landscape;
 
-        // Download PDF dengan nama invoice.pdf
         return $pdf->download('laporanStok_' . $tanggal . '.pdf');
     }
 }

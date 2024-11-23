@@ -20,8 +20,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="edit_password" class="form-label">Password (kosongkan jika tidak ingin mengubah)</label>
-                        <input type="password" class="form-control" id="edit_password" name="password" autocomplete="new-password">
+                        <label for="edit_email" class="form-label" id="email-label">Email (Untuk Recovery)</label>
+                        <input type="email" class="form-control" id="edit_email" name="email">
                     </div>
 
                     <div class="mb-3">

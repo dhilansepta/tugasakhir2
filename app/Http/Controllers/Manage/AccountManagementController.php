@@ -28,7 +28,6 @@ class AccountManagementController extends Controller
             'name' => $request->name,
             'username' => $request->username,
             'email' => $email,
-            Log::info('Email Afer Storing : ' . $email),
             'password' => Hash::make($request->password),
             'role' => $request->role,
             'status' => $request->status,
@@ -46,20 +45,21 @@ class AccountManagementController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:users,username,'.$id],
-            'email' => ['required','string', 'unique:users,email'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $id],
             'role' => ['required', 'string', 'in:Owner,Karyawan'],
             'status' => ['required', 'string', 'in:Aktif,Non_Aktif'],
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()]
         ]);
 
+        $email = $request->role === 'Owner' ? $request->email : null;
+
         $user->update([
             'name' => $request->name,
             'username' => $request->username,
-            'email' => $request->email,
+            'email' => $email,
             'role' => $request->role,
             'status' => $request->status,
         ]);

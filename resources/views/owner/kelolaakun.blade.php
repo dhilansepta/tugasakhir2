@@ -35,6 +35,7 @@
                             <th scope="col">Nama</th>
                             <th scope="col">Role</th>
                             <th scope="col">Username</th>
+                            <th scope="col">Email</th>
                             <th scope="col">Status</th>
                             <th scope="col">Aksi</th>
                         </tr>
@@ -46,6 +47,7 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->role }}</td>
                             <td>{{ $user->username }}</td>
+                            <td>{{ $user->email }}</td>
                             <td>{{ $user->status }}</td>
                             <td>
                                 <a class="btn btn-sm btn-warning mx-2 btn-edit"
@@ -55,6 +57,7 @@
                                     data-id="{{ $user->id }}"
                                     data-name="{{ $user->name }}"
                                     data-username="{{ $user->username }}"
+                                    data-email="{{$user->email}}"
                                     data-role="{{ $user->role }}"
                                     data-status="{{ $user->status }}">
                                     Edit
@@ -63,7 +66,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td class="text-center text-mute" colspan="4">Data user tidak tersedia</td>
+                            <td class="text-center text-mute" colspan="7">Data user tidak tersedia</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -83,12 +86,14 @@
                 var userId = this.getAttribute('data-id');
                 var userName = this.getAttribute('data-name');
                 var userUsername = this.getAttribute('data-username');
+                var userEmail = this.getAttribute('data-email')
                 var userRole = this.getAttribute('data-role');
                 var userStatus = this.getAttribute('data-status');
 
                 // Isi form dengan data user
                 document.getElementById('edit_name').value = userName;
                 document.getElementById('edit_username').value = userUsername;
+                document.getElementById('edit_email').value = userEmail;
                 document.getElementById('edit_role').value = userRole;
                 document.getElementById('edit_status').value = userStatus;
 

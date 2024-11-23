@@ -26,15 +26,6 @@
                         Tambah Data
                     </button>
                 </div>
-
-                <div class="mt-2">
-                    <button
-                        type="button"
-                        class="btn btn-light ms-auto"
-                        style="width: 80px;">
-                        Unduh
-                    </button>
-                </div>
             </div>
         </div>
 
@@ -43,13 +34,45 @@
         @include('layouts.partials.modaledit.barangkeluar')
 
         <div class="d-flex flex-column bd-highlight bg-secondary rounded p-3 mt-3">
-            <div class="d-flex flex-row align-items-end justify-content-between mb-2">
+            <div class="d-flex flex-wrap align-items-end justify-content-between mb-2 gap-2">
                 <div>
                     Data Tanggal
                     <span style="font-weight:bold">
                         {{ request('filterTanggal') ? \Carbon\Carbon::parse(request('filterTanggal'))->format('d M Y') : now()->format('d M Y') }}
                     </span>
                 </div>
+
+                <form action="{{ route('karyawan.barangkeluar') }}" method="GET" class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="form-group mb-0">
+                        <input
+                            class="form-control form-control-sm"
+                            id="filterSearch"
+                            type="text"
+                            name="filterSearch"
+                            placeholder="Cari..."
+                            value="{{ request('filterSearch') }}"
+                            style="width: 150px; border-color:var(--tertiary)">
+                    </div>
+                    <div class="form-group mb-0 d-flex gap-2">
+                        <input
+                            class="form-control form-control-sm me-2"
+                            id="filterTanggal"
+                            type="date"
+                            name="filterTanggal"
+                            value="{{ request('filterTanggal') }}"
+                            style="width: 150px; border-color:var(--tertiary)">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-sm"
+                            style="width: 50px;">
+                            Cari
+                        </button>
+                        <a href="{{ route('karyawan.barangkeluar') }}" class="btn btn-danger btn-sm ms-2" style="width: 50px;">
+                            Clear
+                        </a>
+                    </div>
+                </form>
             </div>
             <div class="table-responsive">
                 <table id="table-data" class="table">

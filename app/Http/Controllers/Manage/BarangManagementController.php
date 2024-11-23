@@ -119,16 +119,6 @@ class BarangManagementController extends Controller
         return redirect()->route('owner.daftarbarang')->with('success', 'Data Barang berhasil diperbarui');
     }
 
-    public function destroy($id)
-    {
-        $barang = Barang::findOrFail($id);
-
-        $barang->delete();
-
-        // Redirect dengan pesan sukses
-        return redirect()->back()->with('success', 'Data Barang berhasil dihapus dan stok telah diperbarui.');
-    }
-
     public function ImportDaftarBarang(Request $request)
     {
         $request->validate([

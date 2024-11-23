@@ -51,7 +51,7 @@
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
                 <a href="{{route('owner.dashboard')}}" class="navbar-brand mx-4 mb-3">
-                    <img src="{{ asset('dark/img/logositoku.png') }}" alt="Logo" style="height: 60px;">
+                    <img src="{{ asset('dark/img/logositoku.png') }}" alt="Logo" style="height: 50px;">
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
