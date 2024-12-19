@@ -36,19 +36,34 @@ class DashboardController extends Controller
 
     public function getData(Request $request)
     {
-        
+        $sevenDays = Carbon::now()->subDays(6);
+
         $barangTelur = Barang::where('nama_barang', 'Telur Ayam')->first();
         $barangIdTelur = $barangTelur->id;
+
+        $dataCountStokTelur = DB::table('laporanstokbarang')
+            ->whereDate('created_at', '>=', $sevenDays)
+            ->count();
 
         $datastokTelur = LaporanStokBarang::where('barang_id', $barangIdTelur)
             ->select(DB::raw('DATE(created_at) as tanggal'), DB::raw('SUM(stok_keluar) as stok_keluar'), DB::raw('SUM(stok_akhir) as stok_akhir'))
             ->groupBy(DB::raw('tanggal'))
-            ->orderBy(DB::raw('tanggal'))
-            ->get();
+            ->orderBy(DB::raw('tanggal'));
 
+        if ($dataCountStokTelur <= 7) {
+            $dataPenjualan = $datastokTelur->get();
+        } else {
+            $dataPenjualan = $datastokTelur
+                ->whereDate('created_at', '>=', $sevenDays)
+                ->get();
+        }
         $labelsStok = $datastokTelur->pluck('tanggal');
         $stokKeluar = $datastokTelur->pluck('stok_keluar');
         $sisaStok = $datastokTelur->pluck('stok_akhir');
+
+        $dataCountPenjualan = DB::table('laporanpenjualan')
+            ->whereDate('created_at', '>=', $sevenDays)
+            ->count();
 
         $dataPenjualan = DB::table('laporanpenjualan')
             ->select(
@@ -58,8 +73,15 @@ class DashboardController extends Controller
                 DB::raw('SUM(keuntungan) as pendapatan_bersih'),
             )
             ->groupBy(DB::raw('tanggal'))
-            ->orderBy(DB::raw('tanggal'))
-            ->get();
+            ->orderBy(DB::raw('tanggal'));
+
+        if ($dataCountPenjualan <= 7) {
+            $dataPenjualan = $dataPenjualan->get();
+        } else {
+            $dataPenjualan = $dataPenjualan
+                ->whereDate('created_at', '>=', $sevenDays)
+                ->get();
+        }
 
         $labelsPenjualan = $dataPenjualan->pluck('tanggal');
         $pendapatanKotor = $dataPenjualan->pluck('pendapatan_kotor');

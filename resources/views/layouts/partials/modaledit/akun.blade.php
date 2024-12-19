@@ -24,6 +24,9 @@
                         <input type="email" class="form-control" id="edit_email" name="email">
                     </div>
 
+                    <label for="edit_password" class="form-label">Password (kosongkan jika tidak ingin mengubah)</label>
+                        <input type="password" class="form-control" id="edit_password" name="password" autocomplete="new-password">
+                        
                     <div class="mb-3">
                         <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
                         <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" autocomplete="new-password">

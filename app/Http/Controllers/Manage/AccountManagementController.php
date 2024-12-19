@@ -48,7 +48,7 @@ class AccountManagementController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:users,username,'.$id],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $id],
+            'email' => ['nullable', 'email', 'max:255', 'unique:users,email,' . $id],
             'role' => ['required', 'string', 'in:Owner,Karyawan'],
             'status' => ['required', 'string', 'in:Aktif,Non_Aktif'],
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()]
